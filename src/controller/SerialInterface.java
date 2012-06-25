@@ -2,8 +2,12 @@ package controller;
 
 import gnu.io.*;
 import java.io.*;
+import java.util.ArrayList;
 
 /**
+ ******************************************************************************
+ *                             SERIAL INTERFACE                               *
+ ****************************************************************************** 
  * A class that provides an interface to serial port methods.
  * 
  * @author simple-developer
@@ -30,33 +34,40 @@ import java.io.*;
  * The write method should use a similar principle to the read, but without the 
  * blocking. 
  * 
- * It is linked to a SerialWriter object running on a separate thread and uses 
- * the write() method as provided by this object, taking a single String 
- * parameter which is the message that you want to write out.
+ * It is linked to a SerialWriter object and uses the write() method as 
+ * provided by this object, taking a single String parameter which is the 
+ * message that you want to write out.
  * 
+ ******************************************************************************
  */
+
 public class SerialInterface {
+	SerialPort serialPort;
+	SerialReader reader;
+	SerialWriter writer;			
+	ArrayList<String> readData;
 	
 	public void connect(String portName) throws Exception {
 		
+		//Create an identifier from our port's name.
 		CommPortIdentifier portIdentifier = CommPortIdentifier
 				.getPortIdentifier(portName);
 		
+		//Check whether the port is currently in use.
 		if (portIdentifier.isCurrentlyOwned()) {
-			System.out.println("Error: Port is currently in use");
+			// TODO Port is in use message
 		} else {
-			
-			CommPort commPort = portIdentifier.open(
-					this.getClass().getName(),
-					2000
-			);
+			//Open this port with SerialInterface as the owner's name and a 
+			//2000ms timeout.
+			CommPort commPort = portIdentifier.open(this.getClass().getName(),
+					2000);
 
 			if (commPort instanceof SerialPort) {
 				
-				SerialPort serialPort = (SerialPort) commPort;
+				this.serialPort = (SerialPort) commPort;
 				
 				//Set the serial port's parameters
-				serialPort.setSerialPortParams(
+				this.serialPort.setSerialPortParams(
 						115200, 					//Baud rate
 						SerialPort.DATABITS_8,		//8 Data Bits
 						SerialPort.STOPBITS_1, 		//1 Stop Bit
@@ -64,17 +75,35 @@ public class SerialInterface {
 				);
 				
 				//Retrieve the I/O streams from the serialPort object.
-				InputStream in = serialPort.getInputStream();
-				OutputStream out = serialPort.getOutputStream();
+				InputStream in = this.serialPort.getInputStream();
+				OutputStream out = this.serialPort.getOutputStream();
+				//Create read & write objects from those streams
+				this.reader = new SerialReader(in, this);
+				this.writer = new SerialWriter(out);
 				
-				//Start the Reader & Writer on new threads.
-				(new Thread(new SerialReader(in))).start();
-				(new Thread(new SerialWriter(out))).start();
-
 			} else {
 				// TODO this device is not a serial port.
 			}
 		}
 	}
-
+	
+	public void write (String message) {
+		this.writer.write(message);
+	}
+	
+	public void storeReadData (String message) {
+		//Pushes the message onto a list.
+		this.readData.add(message);
+	}
+	
+	public String getMostRecentRead () {
+		//Return the most recently read item.
+		return this.readData.get(this.readData.size() - 1);
+	}
+	
+	public void close () {
+		//Close our serial port to free it from our process.
+		this.serialPort.close();
+	}
+	
 }

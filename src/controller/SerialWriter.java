@@ -3,14 +3,18 @@ package controller;
 import java.io.*;
 
 /**
+ ******************************************************************************
+ *                               SERIAL WRITER                                *
+ ****************************************************************************** 
  * A class for writing to an output stream created from a serial port.
- * -------------------------------------------------------------------
+ * ----------------------------------------------------------------------------
  * Code based on examples provided at: http://rxtx.qbang.org/wiki/
- * -------------------------------------------------------------------
- * Takes an output stream object and writes to it on a separate
- * thread.
+ * ----------------------------------------------------------------------------
+ * Uses an OutputStream to send data to a serial port.
+ * 
+ ******************************************************************************
  */
-public class SerialWriter implements Runnable{
+public class SerialWriter {
 	
 	//The output stream that we will be writing to.
 	OutputStream out;
@@ -19,17 +23,6 @@ public class SerialWriter implements Runnable{
 	//serial port.
 	public SerialWriter(OutputStream out) {
 		this.out = out;
-	}
-	
-	//Implements the abstract run method.
-	public void run() {
-		//Clear the output stream of existing data.
-		//So that it is empty and ready to run.
-		try {
-			this.out.flush();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	//A method used to write strings into the OutputStream.
