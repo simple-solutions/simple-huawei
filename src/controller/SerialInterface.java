@@ -38,6 +38,15 @@ import java.util.ArrayList;
  * provided by this object, taking a single String parameter which is the 
  * message that you want to write out.
  * 
+ * Usage
+ * ----------------------------------------------------------------------------
+ * To write:
+ * 		serialInterface.write("Example message goes here.");
+ * 
+ * To read:
+ * 		serialInterface.getMostRecentRead();
+ * 
+ * 
  ******************************************************************************
  */
 
@@ -98,7 +107,13 @@ public class SerialInterface {
 	
 	public String getMostRecentRead () {
 		//Return the most recently read item.
-		return this.readData.get(this.readData.size() - 1);
+		String message = "";
+		try {
+			message = this.readData.get(this.readData.size() - 1);
+		} catch (IndexOutOfBoundsException e) {
+			message = "";
+		}
+		return message;
 	}
 	
 	public void close () {
@@ -107,3 +122,4 @@ public class SerialInterface {
 	}
 	
 }
+// ""
