@@ -4,9 +4,9 @@ import java.io.*;
 
 /**
  * Reads from a serial port.
- * @author simple-developer
+ * ---------------------------------------------------------------
  * Code based on examples provided at: http://rxtx.qbang.org/wiki/
- * 
+ * ---------------------------------------------------------------
  * Takes an input stream object and reads from it on a separate
  * thread. Prints the output to STDOUT.
  */

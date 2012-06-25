@@ -1,3 +1,6 @@
 ## Ignore temporary & eclipse .project files
 *~
 *.project
+.project
+*.classpath
+.classpath
