@@ -11,9 +11,13 @@ package controller;
  * This is the main class that will control the other aspects of application.
  */
 
+/**
+ * An application
+ * @author simple-developer
+ *
+ */
 public class Application {
 	private SerialInterface serialInterface;
-	
 	
 	public Application () {
 		this.serialInterface = new SerialInterface();
@@ -32,8 +36,12 @@ public class Application {
 		this.serialInterface.write(message);
 	}
 	
-	public String readFromPort (String message) {
+	public String readFromPort () {
 		// TODO send to log function.
 		return this.serialInterface.getMostRecentRead();
+	}
+	
+	public void close () {
+		this.serialInterface.close();
 	}
 }

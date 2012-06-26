@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * 
  * @author simple-developer
  * @since 25.06.2012
- *  
+ * 
  * Overview
  * ----------------------------------------------------------------------------
  * This class will act as a sub-controller, accessed by our main controller, 
@@ -46,7 +46,6 @@ import java.util.ArrayList;
  * To read:
  * 		serialInterface.getMostRecentRead();
  * 
- * 
  ******************************************************************************
  */
 
@@ -55,6 +54,10 @@ public class SerialInterface {
 	SerialReader reader;
 	SerialWriter writer;			
 	ArrayList<String> readData;
+	
+	public SerialInterface () {
+		this.readData = new ArrayList<String>();
+	}
 	
 	public void connect(String portName) throws Exception {
 		
@@ -105,12 +108,16 @@ public class SerialInterface {
 		this.readData.add(message);
 	}
 	
+	//Return the most recently read item.
 	public String getMostRecentRead () {
-		//Return the most recently read item.
+		
 		String message = "";
-		try {
+		
+		//Find the item at the top index.
+		int topIndex = this.readData.size() - 1;
+		if(topIndex >= 0){
 			message = this.readData.get(this.readData.size() - 1);
-		} catch (IndexOutOfBoundsException e) {
+		} else {
 			message = "";
 		}
 		return message;
@@ -122,4 +129,3 @@ public class SerialInterface {
 	}
 	
 }
-// ""
