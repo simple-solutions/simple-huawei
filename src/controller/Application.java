@@ -21,27 +21,16 @@ public class Application {
 	
 	public Application () {
 		this.serialInterface = new SerialInterface();
+				
 	}
 	
-	public void connectToPort (String portName) {
-		try {
-			this.serialInterface.connect(portName);
-		} catch (Exception e) {
-			e.printStackTrace();
+	public void phoneCall (String number) {
+		this.serialInterface.write("AT phone home" + number);
+	}
+	
+	public void sendSms (String number, String message) {
+		if(message.length() < 160) {
+			this.serialInterface.write("AT sms" + number + message);
 		}
-	}
-	
-	public void writeToPort (String message) {
-		// TODO send to log function.
-		this.serialInterface.write(message);
-	}
-	
-	public String readFromPort () {
-		// TODO send to log function.
-		return this.serialInterface.getMostRecentRead();
-	}
-	
-	public void close () {
-		this.serialInterface.close();
 	}
 }
