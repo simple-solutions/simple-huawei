@@ -10,6 +10,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import view.HuaweiWindow;
 
 /**
  ******************************************************************************
@@ -53,13 +57,16 @@ import java.util.ArrayList;
  ******************************************************************************
  */
 public class SerialInterface {
-	private InputStream in;
-	private OutputStream out;
-	private SerialPort serialPort;
-	private CommPort commPort;
+	private static InputStream in;
+	private static OutputStream out;
+	private static SerialPort serialPort;
+	private static CommPort commPort;
 	
 	//Connect to the port, with the port name passed as a string argument.
-	void connect(String portName) throws Exception {
+	public static void connect(String portName) throws Exception {
+		
+		System.out.println("Connecting to " + portName);
+		
 		//Create a port identifier from the port's name.
 		CommPortIdentifier portId = CommPortIdentifier.
 				getPortIdentifier(portName);
@@ -68,7 +75,7 @@ public class SerialInterface {
 			System.out.println("Error: Port is currently in use");
 		} else {
 			//Open the port using SerialInterface as the application name.
-			commPort = portId.open(this.getClass().getName(),2000);
+			commPort = portId.open("SimpleHuawei",2000);
 			//Cast the opened Id to a SerialPort object.
 			serialPort = (SerialPort) commPort;
 			//Port configuration options.
@@ -87,30 +94,33 @@ public class SerialInterface {
 			//Add the event listener to the serial port object.
 			serialPort.addEventListener(new SerialReader(in));
 			serialPort.notifyOnDataAvailable(true);
-
+			
+			//Start a status requester.
+			(new Thread(new StatusRequester("AT+CSQ\r", 10000))).start();
 		}
 	}
 	
-	public void close () {
+	public static void close () {
 		//Close both streams.
 		try {
 			in.close();
 			out.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 		//Close the serial and communication ports.
 		serialPort.close();
 		commPort.close();
+		
 	}
 	
 	//Write to the serial port.
-	public void write (String message) {
+	public static void write (String message) {
 		CommandHandler.addCommand(message);
 	}
 	
 	//Read from the serial port.
-	public String read () {
+	public static String read () {
 		return CommandHandler.getResponse();
 	}
 
@@ -119,8 +129,9 @@ public class SerialInterface {
 	 * treated as the end of a block in this example.
 	 */
 	public static class SerialReader implements SerialPortEventListener {
-		private InputStream in;
+		@SuppressWarnings("unused")
 		private byte[] buffer = new byte[1024];
+		private InputStream in;
 		
 		public SerialReader(InputStream in) {
 			this.in = in;
@@ -133,6 +144,8 @@ public class SerialInterface {
 			boolean uc = false;				//Unsolicited Response flag
 			String responseStr = "";		//String to hold response
 			
+			System.out.println("Serial Event!");
+			
 			try {
 				//While there are bytes available in the buffer.
 				while ((len = this.in.read(buffer)) > -1) {
@@ -142,7 +155,6 @@ public class SerialInterface {
 					//Create a string from the buffer and append it to our 
 					//response.
 					responseStr += new String(buffer, 0, len);	
-					
 					//If the data doesn't start with the current command
 					//we need to flag an unsolicited command response and 
 					//break the loop.
@@ -150,6 +162,7 @@ public class SerialInterface {
 					//If it does start with the current command and has an OK 
 					//or an ERROR break the loop and send it to the 
 					//receivedData register.
+					
 					if(!responseStr.startsWith(currentCommand)) {
 						uc = true;
 						break;
@@ -159,8 +172,34 @@ public class SerialInterface {
 					}
 
 				}
+				
+				System.out.println("Response: " + responseStr);
 				//If the response is solicited.
 				if(!uc) {
+					if(responseStr.indexOf("+COPS") != -1) {
+						
+						Pattern p = Pattern.compile(".*\"(.+)\"");
+						Matcher m = p.matcher(responseStr);
+						boolean matchFound = m.find();
+						
+						if (matchFound) {
+							System.out.println(m.group(1));
+						}
+						
+					}
+					
+					if(responseStr.indexOf("+CSQ") != -1) {
+
+						Pattern p = Pattern.compile(".*([0-9]+,[0-9]+).*");
+						Matcher m = p.matcher(responseStr);
+						boolean matchFound = m.find();
+						String[] signals = m.group(1).split(",");
+						
+						if (matchFound) {
+							HuaweiWindow.updateSignal(Integer.parseInt(signals[0]));
+						}
+						
+					}
 					//Add it to the receiveData register.
 					CommandHandler.receiveData(responseStr);
 				} else {
@@ -171,7 +210,7 @@ public class SerialInterface {
 			}
 		}
 	}
-
+	
 	/** */
 	public static class SerialWriter implements Runnable {
 		private OutputStream out;
@@ -199,20 +238,20 @@ public class SerialInterface {
 				}
 				
 			} catch (IOException e) {
-				e.printStackTrace();
+				System.out.println(e.getMessage());
 				System.exit(-1);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				System.out.println(e.getMessage());
 			}
 		}
 	}
 	
 	public static class CommandHandler {
 		
-		private static ArrayList<String> waitingCommands;
-		private static ArrayList<String> sentCommands;
-		private static ArrayList<String> receivedData;
-		private static ArrayList<String> validatedData;
+		private static ArrayList<String> waitingCommands = new ArrayList<String>();
+		private static ArrayList<String> sentCommands = new ArrayList<String>();
+		private static ArrayList<String> receivedData = new ArrayList<String>();
+		private static ArrayList<String> validatedData = new ArrayList<String>();
 		private static boolean commandMode = false;
 		
 		public CommandHandler () {
@@ -244,6 +283,7 @@ public class SerialInterface {
 		
 		//Add a command to the waiting list.
 		public static void addCommand (String command) {
+			
 			waitingCommands.add(command);
 		}
 		
@@ -254,14 +294,29 @@ public class SerialInterface {
 			
 			//Create a small delay that will ensure the command has arrived.
 			try {
-				Thread.sleep(100);
+				Thread.sleep(200);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				System.out.println(e.getMessage());
 			}
 			
-			response = receivedData.get(0);
-			receivedData.remove(0);
-			return response;
+			int timeout = 2000, count = 0, interval = 10;
+			
+			while(availableReceived() <= 0 || count >= timeout) {
+				try {
+					Thread.sleep(interval);
+				} catch (InterruptedException e) {
+					System.out.println(e.getMessage());
+				}
+				count += interval;
+			}
+			if(count >= timeout) {
+				return "No data.";
+			} else {
+				response = receivedData.get(0);
+				receivedData.remove(0);
+				
+				return response;
+			}
 		}
 		
 		//Add some data to the received register.
@@ -281,18 +336,37 @@ public class SerialInterface {
 			return currentCommand;
 		}
 		
-		
 	}
-
-	public static void main(String[] args) {
-		try {
-			(new SerialInterface()).connect("/dev/ttyS0");
-			CommandHandler.addCommand("ati\r");
-			System.out.println("Response: " + CommandHandler.getResponse());
-			
-		} catch (Exception e) {
-			e.printStackTrace();
+	
+	/**
+	 * Sends a status request command to the device at a interval
+	 * defined in the constructor.
+	 * @author simple-developer
+	 *
+	 */
+	public static class StatusRequester implements Runnable {
+		private String command;
+		private int interval;
+		
+		public StatusRequester (String command, int interval) {
+			this.command = command;
+			this.interval = interval;
 		}
+		
+		public void run() {
+			while(true) {
+				try {
+					write(this.command);
+					Thread.sleep(interval/2);
+					write("AT+COPS?\r");
+					Thread.sleep(interval/2);
+					
+				} catch (InterruptedException e) {
+					System.out.println(e.getMessage());
+				}
+			}
+		}
+		
 	}
 
 }

@@ -13,63 +13,66 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
+import controller.Application;
+import controller.SerialInterface;
+import javax.swing.table.DefaultTableModel;
+
 
 public class HuaweiWindow extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private boolean logging;
+	private static boolean logging;
+	private static Application appReference;
 
-	private final JPanel contentPane;
-	private final JPanel phoneTab;
-	private final JPanel pnlPhoneKeypad;
-	private final JPanel pnlWrapper;
-	private final JPanel pnlTabs;
-	private final JPanel pnlButtonsContainer;
-	private final JPanel smsTab;
-	private final JPanel pnlPhoneActions;
-	private final JLabel lblCharCount;
-	private final JPanel tcpTab;
-	private final JPanel pnlOptions;
-	private final JPanel pnlControls;
-	private final JPanel pnlMonitor;
-	
-	
-	
-	
-	private final JButton phoneButton1;
-	private final JButton phoneButton2;
-	private final JButton phoneButton3;
-	private final JButton phoneButton4;
+	private static JPanel contentPane;
+	private static JPanel phoneTab;
+	private static  JPanel pnlPhoneKeypad;
+	private static  JPanel pnlWrapper;
+	private static  JPanel pnlTabs;
+	private static  JPanel pnlButtonsContainer;
+	private static  JPanel smsTab;
+	private static  JPanel pnlPhoneActions;
+	private static  JLabel lblCharCount;
+	private static  JPanel tcpTab;
+	private static  JPanel pnlOptions;
+	private static  JPanel pnlControls;
+	private static  JPanel pnlMonitor;
+	private static  JButton phoneButton1;
+	private static  JButton phoneButton2;
+	private static  JButton phoneButton3;
+	private static  JButton phoneButton4;
 	private final JButton phoneButton5;
 	private final JButton phoneButton6;
 	private final JButton phoneButton7;
-	private final JButton phoneButton8;
-	private final JButton phoneButton9;
-	private final JButton phoneButton0;
-	private final JButton btnDial;
-	private final JButton btnEnd;
-	private final JButton btnSendSms;
-	private final JLabel lblSignal;
-	private final JLabel lblOperator;
-	private final JLabel lblCallStatus;
-	private final JLabel lblSelectDevice;
-	private final JLabel lblMonitor;
-	private final JToggleButton tglLog;
-	private final JToggleButton tglConnect;
-	private final JTextArea txtAreaMonitor;
-	private final JTextArea txtAreaSms;
+	private static JButton phoneButton8;
+	private static JButton phoneButton9;
+	private static JButton phoneButton0;
+	private static JButton btnDial;
+	private static JButton btnEnd;
+	private static JButton btnSendSms;
+	private static JLabel lblSignal;
+	private static JLabel lblOperator;
+	private static JLabel lblCallStatus;
+	private static JLabel lblSelectDevice;
+	private static JLabel lblMonitor;
+	private static JToggleButton tglLog;
+	private static JToggleButton tglConnect;
+	private static JTextArea txtAreaMonitor;
+	private static JTextArea txtAreaSms;
+	private static JScrollPane scrollPane_1;
+	private static JTabbedPane tabbedPane;
+	private static JTextField txtPhoneDisplay;
+	private static JComboBox cmbDevice;
+	private static JScrollPane scrollPane;
+	private static JProgressBar prgSignal;
+	private static JPanel cmdTab;
+	public static JList lstCommands;
 	
-	private final JScrollPane scrollPane_1;
-	private final JTabbedPane tabbedPane;
-	private final JTextField txtPhoneDisplay;
-	
-	private final JComboBox cmbDevice;
-	
-	
-	private final JScrollPane scrollPane;
-	private final JProgressBar prgSignal;
-	
-	public HuaweiWindow() {
+	public HuaweiWindow(Application app) {
+		
+		//Create a reference back to the app.
+		appReference = app;
+		
 		setIconImage(Toolkit.getDefaultToolkit().getImage(HuaweiWindow.class.
 				getResource("/com/sun/java/swing/plaf/windows/icons/Computer.gif")));
 		setTitle("Huawei Interface");
@@ -379,6 +382,7 @@ public class HuaweiWindow extends JFrame {
 						/*
 						 * CODE FOR CONNECTING TO THE PORT GOES HERE
 						 */
+						SerialInterface.connect(portName);
 						
 						tabbedPane.setEnabled(true);
 						//Enable all children of the initial tab
@@ -412,6 +416,7 @@ public class HuaweiWindow extends JFrame {
 						/*
 						 * CODE FOR DISCONNECTING TO THE PORT GOES HERE
 						 */
+						SerialInterface.close();
 						
 						//Disable the tab control
 						tabbedPane.setEnabled(false);
@@ -469,6 +474,23 @@ public class HuaweiWindow extends JFrame {
 		txtPhoneDisplay.setEnabled(false);
 		btnDial.setEnabled(false);
 		btnEnd.setEnabled(false);
+		
+		cmdTab = new JPanel();
+		tabbedPane.addTab("Command", null, cmdTab, null);
+		cmdTab.setLayout(null);
+		
+		lstCommands = new JList();
+		lstCommands.setModel(new AbstractListModel() {
+			String[] values = new String[] {"SMS | Tell | 0304"};
+			public int getSize() {
+				return values.length;
+			}
+			public Object getElementAt(int index) {
+				return values[index];
+			}
+		});
+		lstCommands.setBounds(12, 12, 221, 230);
+		cmdTab.add(lstCommands);
 		lblSignal.setEnabled(false);
 		lblOperator.setEnabled(false);
 		prgSignal.setEnabled(false);
@@ -519,15 +541,14 @@ public class HuaweiWindow extends JFrame {
 	 ********************************************************
 	 ********************************************************/
 	
-	public void updateSignal (int signal) {
+	public static void updateSignal (int signal) {
 		prgSignal.setValue(signal);
 	}
 	
-	public void writeToMonitor (String message) {
+	public static void writeToMonitor (String message) {
 		if(logging) {
 			//Write to file as well as monitor
 		}
 		txtAreaMonitor.setText(txtAreaMonitor.getText() + message);
 	}
-
 }
