@@ -52,9 +52,18 @@ public class Application {
 	}
 	
 	public static class ConfigReader {
+		private static ArrayList<String> commands;
 		
-		public static ArrayList<String> setup () throws FileNotFoundException {
-			ArrayList<String> lines = new ArrayList<String>();
+		private static String[] _getStaticArray () {
+			String[] staticCommands = new String[commands.size()];
+			for(int i = 0; i < commands.size(); i++) {
+				staticCommands[i] = commands.get(i);
+			}
+			return staticCommands;
+		}
+		
+		public static String[] setup () throws FileNotFoundException {
+			commands = new ArrayList<String>();
 			//Catch read exceptions
 			try {
 				//Create our input as a buffered reader aimed at our path
@@ -63,7 +72,7 @@ public class Application {
 			    //While there are lines in the buffer, add them to our readData string.
 			    while ((str = in.readLine()) != null) {
 			    	if(str.matches("^[^#\\s].*")) {
-			    		lines.add(str);
+			    		commands.add(str);
 			    		System.out.println(str);
 			    		//HuaweiWindow.lstCommands.
 			    	}
@@ -75,7 +84,7 @@ public class Application {
 				System.out.println(e.getMessage());
 			}
 			//Otherwise return our files contents.
-			return lines;
+			return _getStaticArray();
 		}
 		
 		

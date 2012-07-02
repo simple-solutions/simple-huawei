@@ -17,30 +17,33 @@ import controller.Application;
 import controller.SerialInterface;
 import javax.swing.table.DefaultTableModel;
 
+import model.Command;
+
 
 public class HuaweiWindow extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private static boolean logging;
 	private static Application appReference;
+	private static AbstractListModel cmdList;
 
 	private static JPanel contentPane;
 	private static JPanel phoneTab;
-	private static  JPanel pnlPhoneKeypad;
-	private static  JPanel pnlWrapper;
-	private static  JPanel pnlTabs;
-	private static  JPanel pnlButtonsContainer;
-	private static  JPanel smsTab;
-	private static  JPanel pnlPhoneActions;
-	private static  JLabel lblCharCount;
-	private static  JPanel tcpTab;
-	private static  JPanel pnlOptions;
-	private static  JPanel pnlControls;
-	private static  JPanel pnlMonitor;
-	private static  JButton phoneButton1;
-	private static  JButton phoneButton2;
-	private static  JButton phoneButton3;
-	private static  JButton phoneButton4;
+	private static JPanel pnlPhoneKeypad;
+	private static JPanel pnlWrapper;
+	private static JPanel pnlTabs;
+	private static JPanel pnlButtonsContainer;
+	private static JPanel smsTab;
+	private static JPanel pnlPhoneActions;
+	private static JLabel lblCharCount;
+	private static JPanel tcpTab;
+	private static JPanel pnlOptions;
+	private static JPanel pnlControls;
+	private static JPanel pnlMonitor;
+	private static JButton phoneButton1;
+	private static JButton phoneButton2;
+	private static JButton phoneButton3;
+	private static JButton phoneButton4;
 	private final JButton phoneButton5;
 	private final JButton phoneButton6;
 	private final JButton phoneButton7;
@@ -77,7 +80,7 @@ public class HuaweiWindow extends JFrame {
 				getResource("/com/sun/java/swing/plaf/windows/icons/Computer.gif")));
 		setTitle("Huawei Interface");
 		setResizable(false);
-				
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 510, 328);
 		contentPane = new JPanel();
@@ -479,16 +482,18 @@ public class HuaweiWindow extends JFrame {
 		tabbedPane.addTab("Command", null, cmdTab, null);
 		cmdTab.setLayout(null);
 		
-		lstCommands = new JList();
-		lstCommands.setModel(new AbstractListModel() {
-			String[] values = new String[] {"SMS | Tell | 0304"};
+		
+		cmdList = new AbstractListModel () {
+			String[] values = {}; // Get commands
 			public int getSize() {
 				return values.length;
 			}
 			public Object getElementAt(int index) {
 				return values[index];
 			}
-		});
+		};
+		
+		lstCommands = new JList(cmdList);
 		lstCommands.setBounds(12, 12, 221, 230);
 		cmdTab.add(lstCommands);
 		lblSignal.setEnabled(false);
@@ -550,5 +555,9 @@ public class HuaweiWindow extends JFrame {
 			//Write to file as well as monitor
 		}
 		txtAreaMonitor.setText(txtAreaMonitor.getText() + message);
+	}
+	
+	public static void addCommand (Command command) {
+		//Add an item to the list model
 	}
 }
