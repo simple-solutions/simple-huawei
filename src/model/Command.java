@@ -24,6 +24,15 @@ public class Command {
 		return message;
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Command [name=" + name + ", description=" + description
+				+ ", message=" + message + "]";
+	}
+
 	/**
 	 * @return the message
 	 */

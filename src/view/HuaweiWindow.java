@@ -11,21 +11,25 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import controller.Application;
 import controller.SerialInterface;
-import javax.swing.table.DefaultTableModel;
+
 
 import model.Command;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ListSelectionEvent;
 
 
 public class HuaweiWindow extends JFrame {
-
+	
 	private static final long serialVersionUID = 1L;
 	private static boolean logging;
-	private static Application appReference;
-	private static AbstractListModel cmdList;
+
+	private static DefaultListModel cmdList;
+	private static Command[] commandSet;
 
 	private static JPanel contentPane;
 	private static JPanel phoneTab;
@@ -58,6 +62,7 @@ public class HuaweiWindow extends JFrame {
 	private static JLabel lblCallStatus;
 	private static JLabel lblSelectDevice;
 	private static JLabel lblMonitor;
+	private static JLabel lblCmdDesc;
 	private static JToggleButton tglLog;
 	private static JToggleButton tglConnect;
 	private static JTextArea txtAreaMonitor;
@@ -71,10 +76,9 @@ public class HuaweiWindow extends JFrame {
 	private static JPanel cmdTab;
 	public static JList lstCommands;
 	
-	public HuaweiWindow(Application app) {
+	public HuaweiWindow() {
 		
 		//Create a reference back to the app.
-		appReference = app;
 		
 		setIconImage(Toolkit.getDefaultToolkit().getImage(HuaweiWindow.class.
 				getResource("/com/sun/java/swing/plaf/windows/icons/Computer.gif")));
@@ -82,7 +86,7 @@ public class HuaweiWindow extends JFrame {
 		setResizable(false);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 510, 328);
+		setBounds(100, 100, 510, 350);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -233,6 +237,8 @@ public class HuaweiWindow extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				btnEnd.setEnabled(true);
 				btnDial.setEnabled(false);
+				/* MAKE THE CALL */
+				Application.phoneCall(txtPhoneDisplay.getText());
 			}
 		});
 		btnEnd.addMouseListener(new MouseAdapter() {
@@ -482,20 +488,34 @@ public class HuaweiWindow extends JFrame {
 		tabbedPane.addTab("Command", null, cmdTab, null);
 		cmdTab.setLayout(null);
 		
+		cmdList = new DefaultListModel();
+		try {
+			commandSet = controller.Application.ConfigReader.setup();
+		} catch (FileNotFoundException e1) {
+			System.out.println(e1.getMessage());
+		}
 		
-		cmdList = new AbstractListModel () {
-			String[] values = {}; // Get commands
-			public int getSize() {
-				return values.length;
-			}
-			public Object getElementAt(int index) {
-				return values[index];
-			}
-		};
+		for(int i = 0; i < commandSet.length; i++) {
+			System.out.println(i + "/" + commandSet.length);
+			System.out.println(commandSet[i].toString());
+			cmdList.addElement(commandSet[i].getName());
+		}
 		
 		lstCommands = new JList(cmdList);
-		lstCommands.setBounds(12, 12, 221, 230);
+		lstCommands.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent arg0) {
+				int commandIndex = arg0.getFirstIndex();
+				lblCmdDesc.setText("<html><p>" + commandSet[commandIndex].getDescription() + "</p></html>");
+			}
+		});
+		lstCommands.setBounds(12, 12, 221, 200);
 		cmdTab.add(lstCommands);
+		
+		lblCmdDesc = new JLabel("No command set.");
+		lblCmdDesc.setForeground(Color.GRAY);
+		lblCmdDesc.setVerticalAlignment(SwingConstants.TOP);
+		lblCmdDesc.setBounds(12, 213, 221, 82);
+		cmdTab.add(lblCmdDesc);
 		lblSignal.setEnabled(false);
 		lblOperator.setEnabled(false);
 		prgSignal.setEnabled(false);
@@ -526,6 +546,7 @@ public class HuaweiWindow extends JFrame {
 		/********************************************
 		 *            LIST AVAILABLE PORTS          *
 		 ********************************************/
+		@SuppressWarnings("unchecked")
 		java.util.Enumeration<CommPortIdentifier> portEnum = CommPortIdentifier.getPortIdentifiers();
 		ArrayList<String> devices = new ArrayList<String>();
 		//Create the list of devices

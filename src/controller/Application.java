@@ -10,29 +10,28 @@ package controller;
  * at+cops?
  * This is the main class that will control the other aspects of application.
  */
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.util.ArrayList;
-import java.util.Scanner;
+
+import model.Command;
 
 import view.HuaweiWindow;
 
 
 public class Application {
-	public SerialInterface serialInterface;
+	public static SerialInterface serialInterface;
 	
-	public Application () {
-		this.serialInterface = new SerialInterface();
+	public static void setup () {
+		serialInterface = new SerialInterface();
 		
-		HuaweiWindow frame = new HuaweiWindow(this);
+		HuaweiWindow frame = new HuaweiWindow();
 		frame.setVisible(true);
 		
-		ConfigReader cf = new ConfigReader();
 		try {
-			cf.setup();
+			ConfigReader.setup();
 		} catch (FileNotFoundException e) {
 			System.out.println(e.getMessage());
 		}
@@ -41,11 +40,11 @@ public class Application {
 		//System.out.println(this.serialInterface.read());
 	}
 	
-	public void phoneCall (String number) {
+	public static void phoneCall (String number) {
 		//this.serialInterface.write("AT phone home" + number);
 	}
 	
-	public void sendSms (String number, String message) {
+	public static void sendSms (String number, String message) {
 		if(message.length() < 160) {
 			//this.serialInterface.write("AT sms" + number + message);
 		}
@@ -54,15 +53,18 @@ public class Application {
 	public static class ConfigReader {
 		private static ArrayList<String> commands;
 		
-		private static String[] _getStaticArray () {
-			String[] staticCommands = new String[commands.size()];
+		private static Command[] _getStaticArray () {
+			//Create a new static array the same size as our arrayList
+			Command[] staticCommands = new Command[commands.size()];
+			//Add all items to the static array
 			for(int i = 0; i < commands.size(); i++) {
-				staticCommands[i] = commands.get(i);
+				String[] components = commands.get(i).split("\\|");
+				staticCommands[i] = new Command(components[0], components[1], components[2]);
 			}
 			return staticCommands;
 		}
 		
-		public static String[] setup () throws FileNotFoundException {
+		public static Command[] setup () throws FileNotFoundException {
 			commands = new ArrayList<String>();
 			//Catch read exceptions
 			try {
@@ -73,8 +75,6 @@ public class Application {
 			    while ((str = in.readLine()) != null) {
 			    	if(str.matches("^[^#\\s].*")) {
 			    		commands.add(str);
-			    		System.out.println(str);
-			    		//HuaweiWindow.lstCommands.
 			    	}
 			    }
 			    //Close the stream

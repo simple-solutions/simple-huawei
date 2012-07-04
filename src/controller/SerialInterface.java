@@ -96,7 +96,7 @@ public class SerialInterface {
 			serialPort.notifyOnDataAvailable(true);
 			
 			//Start a status requester.
-			(new Thread(new StatusRequester("AT+CSQ\r", 10000))).start();
+			(new Thread(new StatusRequester("AT+CSQ;+COPS\r", 10000))).start();
 		}
 	}
 	
@@ -162,7 +162,7 @@ public class SerialInterface {
 					//If it does start with the current command and has an OK 
 					//or an ERROR break the loop and send it to the 
 					//receivedData register.
-					
+					System.out.println(responseStr);
 					if(!responseStr.startsWith(currentCommand)) {
 						uc = true;
 						break;
@@ -357,10 +357,7 @@ public class SerialInterface {
 			while(true) {
 				try {
 					write(this.command);
-					Thread.sleep(interval/2);
-					write("AT+COPS?\r");
-					Thread.sleep(interval/2);
-					
+					Thread.sleep(interval);
 				} catch (InterruptedException e) {
 					System.out.println(e.getMessage());
 				}
