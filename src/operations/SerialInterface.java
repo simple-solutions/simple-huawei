@@ -94,9 +94,6 @@ public class SerialInterface {
 			//Add the event listener to the serial port object.
 			serialPort.addEventListener(new SerialReader(in));
 			serialPort.notifyOnDataAvailable(true);
-			
-			//Start a status requester.
-			(new Thread(new StatusRequester("AT+CSQ\r", 10000))).start();
 		}
 	}
 	
@@ -162,7 +159,6 @@ public class SerialInterface {
 					//If it does start with the current command and has an OK 
 					//or an ERROR break the loop and send it to the 
 					//receivedData register.
-					System.out.println(responseStr);
 					if(!responseStr.startsWith(currentCommand)) {
 						uc = true;
 						break;
@@ -173,7 +169,7 @@ public class SerialInterface {
 
 				}
 				
-				System.out.println("Response: " + responseStr);
+				Window.writeToMonitor("READ: " + responseStr.trim());
 				//If the response is solicited.
 				if(!uc) {
 					if(responseStr.indexOf("+COPS") != -1) {
@@ -334,34 +330,6 @@ public class SerialInterface {
 			//Remove it from the register.
 			waitingCommands.remove(0);
 			return currentCommand;
-		}
-		
-	}
-	
-	/**
-	 * Sends a status request command to the device at a interval
-	 * defined in the constructor.
-	 * @author simple-developer
-	 *
-	 */
-	public static class StatusRequester implements Runnable {
-		private String command;
-		private int interval;
-		
-		public StatusRequester (String command, int interval) {
-			this.command = command;
-			this.interval = interval;
-		}
-		
-		public void run() {
-			while(true) {
-				try {
-					write(this.command);
-					Thread.sleep(interval);
-				} catch (InterruptedException e) {
-					System.out.println(e.getMessage());
-				}
-			}
 		}
 		
 	}

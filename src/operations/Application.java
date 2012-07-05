@@ -21,11 +21,15 @@ import operations.ConfigReader;
 
 public class Application {
 	
+	public static boolean connected;
 	public static Command[] commands;
 	
 	public static void main (String[] args) {
 		Window mainWindow = new Window();
 		mainWindow.setVisible(true);
+		
+		//Start a status requester.
+		(new Thread(new StatusRequester("AT+CSQ\r", 10000))).start();
 		
 		listCommands();
 		listDevices();
@@ -33,6 +37,7 @@ public class Application {
 	
 	public static void write (String message) {
 		SerialInterface.write(message);
+		Window.writeToMonitor("WRITE: " + message);
 	}
 	
 	public static String read () {
@@ -64,6 +69,37 @@ public class Application {
 	public static void deviceConfig () {
 		//Turn on incoming call information
 		SerialInterface.write("AT+CLIP=1");
+	}
+	
+	/**
+	 * Sends a status request command to the device at a interval
+	 * defined in the constructor.
+	 * @author simple-developer
+	 *
+	 */
+	public static class StatusRequester implements Runnable {
+		private String command;
+		private int interval;
+		
+		public StatusRequester (String command, int interval) {
+			this.command = command;
+			this.interval = interval;
+		}
+		
+		public void run() {
+			while(true) {
+				try {
+					write(this.command);
+					Thread.sleep(interval);
+				} catch (InterruptedException e) {
+					System.out.println(e.getMessage());
+				}
+				if(!Application.connected) {
+					break;
+				}
+			}
+		}
+		
 	}
         
 }

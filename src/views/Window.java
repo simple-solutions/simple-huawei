@@ -548,7 +548,7 @@ public class Window extends JFrame {
 		if(logging) {
 			//Write to file as well as monitor
 		}
-		txtAreaMonitor.setText(txtAreaMonitor.getText() + message);
+		txtAreaMonitor.setText(txtAreaMonitor.getText() + message + "\n");
 	}
 	
 }
