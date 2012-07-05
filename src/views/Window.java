@@ -14,6 +14,8 @@ import events.InterfaceEvents;
 
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 
 public class Window extends JFrame {
@@ -21,6 +23,7 @@ public class Window extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private static boolean logging;
 	private static DefaultListModel cmdList;
+	private int commandIndex = 0;
 	
 	private static JPanel contentPane;
 	private static JPanel phoneTab;
@@ -87,7 +90,7 @@ public class Window extends JFrame {
 		setResizable(false);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 510, 350);
+		setBounds(100, 100, 510, 406);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -366,7 +369,7 @@ public class Window extends JFrame {
 		
 		txtAreaMonitor = new JTextArea();
 		scrollPane = new JScrollPane(txtAreaMonitor);
-		scrollPane.setSize(225, 117);
+		scrollPane.setSize(226, 159);
 		scrollPane.setLocation(12, 27);
 		pnlMonitor.add(scrollPane);
 		txtAreaMonitor.setDropMode(DropMode.INSERT);
@@ -482,7 +485,7 @@ public class Window extends JFrame {
 		lstCommands = new JList(cmdList);
 		lstCommands.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent arg0) {
-				int commandIndex = arg0.getFirstIndex();
+				commandIndex = arg0.getFirstIndex();
 				InterfaceEvents.getCommandDescription(commandIndex);
 			}
 		});
@@ -492,8 +495,19 @@ public class Window extends JFrame {
 		lblCmdDesc = new JLabel("No command set.");
 		lblCmdDesc.setForeground(Color.GRAY);
 		lblCmdDesc.setVerticalAlignment(SwingConstants.TOP);
-		lblCmdDesc.setBounds(12, 213, 221, 82);
+		lblCmdDesc.setBounds(12, 241, 221, 98);
 		cmdTab.add(lblCmdDesc);
+		
+		JButton btnNewButton = new JButton("Send Command");
+		btnNewButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				InterfaceEvents.sendCommand(commandIndex);
+			}
+		});
+		
+		btnNewButton.setBounds(12, 215, 221, 25);
+		cmdTab.add(btnNewButton);
 		lblSignal.setEnabled(false);
 		lblOperator.setEnabled(false);
 		prgSignal.setEnabled(false);
@@ -550,5 +564,4 @@ public class Window extends JFrame {
 		}
 		txtAreaMonitor.setText(txtAreaMonitor.getText() + message + "\n");
 	}
-	
 }

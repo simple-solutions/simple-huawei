@@ -17,7 +17,9 @@ import views.Window;
 
 /**
  ******************************************************************************
- *                             SERIAL INTERFACE                               *
+ *							 +------------------+							  *
+ *                           | SERIAL INTERFACE |                             *
+ *                           +------------------+ 							  *
  ****************************************************************************** 
  * A class that provides an interface to serial port methods.
  * 
@@ -51,7 +53,7 @@ import views.Window;
  * To write:
  * 		serialInterface.write("Example message goes here.");
  * 
- * To read:
+ * To read:••••••••
  * 		serialInterface.read();
  * 
  ******************************************************************************
@@ -289,11 +291,11 @@ public class SerialInterface {
 			String response;
 			
 			//Create a small delay that will ensure the command has arrived.
-			try {
+			/*try {
 				Thread.sleep(200);
 			} catch (InterruptedException e) {
 				System.out.println(e.getMessage());
-			}
+			}*/
 			
 			int timeout = 2000, count = 0, interval = 10;
 			

@@ -44,4 +44,9 @@ public class InterfaceEvents {
 		String description = Application.commands[index].getDescription();
 		Window.setCommandDescription(description);
 	}
+	
+	public static void sendCommand (int index) {
+		//TODO do templating stuff here
+		Application.write(Application.commands[index].getMessage());
+	}
 }
