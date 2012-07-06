@@ -14,14 +14,16 @@ public class Command {
 	
 	public String template (String valuesStr) {
 		String[] values = valuesStr.split(",");
-		//TODO Check whether @ is a valid character for templating.
+		String command;
 		int c = 0;
+		System.out.println("Templating " + this.message + " with " + valuesStr);
+		command = this.message;
 		while(this.message.indexOf("@") != -1 && c < values.length) {
 			//Replace the index character
-			message = message.replaceFirst("@", values[c].trim());
+			command = command.replaceFirst("@", values[c].trim());
 			c++;
 		}
-		return message;
+		return command;
 	}
 	
 	public String toString() {

@@ -14,8 +14,6 @@ import events.InterfaceEvents;
 
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 
 public class Window extends JFrame {
@@ -51,12 +49,14 @@ public class Window extends JFrame {
 	private static JButton btnDial;
 	private static JButton btnEnd;
 	private static JButton btnSendSms;
+	private static JButton btnNewButton;
 	private static JLabel lblSignal;
 	private static JLabel lblOperator;
 	private static JLabel lblCallStatus;
 	private static JLabel lblSelectDevice;
 	private static JLabel lblMonitor;
 	private static JLabel lblCmdDesc;
+	private static JLabel lblCommandPreview;
 	private static JToggleButton tglLog;
 	private static JToggleButton tglConnect;
 	private static JTextArea txtAreaMonitor;
@@ -69,12 +69,14 @@ public class Window extends JFrame {
 	private static JProgressBar prgSignal;
 	private static JPanel cmdTab;
 	public static JList lstCommands;
+	private JTextField txtCommandVariables;
+	
 	
 	public Window() {
 		
 		// Get the native look and feel class name
 		String nativeLF = UIManager.getSystemLookAndFeelClassName();
-
+		
 		// Install the look and feel
 		try {
 		    UIManager.setLookAndFeel(nativeLF);
@@ -122,7 +124,7 @@ public class Window extends JFrame {
 		pnlButtonsContainer.setBackground(SystemColor.control);
 		pnlButtonsContainer.setBorder(new EtchedBorder(EtchedBorder.RAISED,
 				null, null));
-		pnlButtonsContainer.setBounds(39, 50, 174, 125);
+		pnlButtonsContainer.setBounds(78, 44, 97, 137);
 		pnlPhoneKeypad.add(pnlButtonsContainer);
 		pnlButtonsContainer.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
@@ -368,6 +370,7 @@ public class Window extends JFrame {
 		pnlMonitor.add(lblMonitor);
 		
 		txtAreaMonitor = new JTextArea();
+		txtAreaMonitor.setFont(new Font("Monospaced", Font.PLAIN, 10));
 		scrollPane = new JScrollPane(txtAreaMonitor);
 		scrollPane.setSize(226, 159);
 		scrollPane.setLocation(12, 27);
@@ -482,23 +485,31 @@ public class Window extends JFrame {
 		
 		cmdList = new DefaultListModel();
 		
+		
+		
 		lstCommands = new JList(cmdList);
+		lstCommands.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		
+		JScrollPane scrollPane_2 = new JScrollPane(lstCommands);
+		scrollPane_2.setBounds(12, 6, 221, 172);
+		cmdTab.add(scrollPane_2);
+		
 		lstCommands.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent arg0) {
 				commandIndex = arg0.getFirstIndex();
-				InterfaceEvents.getCommandDescription(commandIndex);
+				InterfaceEvents.getCommandPreview(commandIndex, txtCommandVariables.getText());
+				
 			}
 		});
-		lstCommands.setBounds(12, 12, 221, 200);
-		cmdTab.add(lstCommands);
+		lstCommands.setBounds(12, 6, 221, 172);
 		
 		lblCmdDesc = new JLabel("No command set.");
 		lblCmdDesc.setForeground(Color.GRAY);
 		lblCmdDesc.setVerticalAlignment(SwingConstants.TOP);
-		lblCmdDesc.setBounds(12, 241, 221, 98);
+		lblCmdDesc.setBounds(12, 257, 221, 82);
 		cmdTab.add(lblCmdDesc);
 		
-		JButton btnNewButton = new JButton("Send Command");
+		btnNewButton = new JButton("Send Command");
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -506,8 +517,17 @@ public class Window extends JFrame {
 			}
 		});
 		
-		btnNewButton.setBounds(12, 215, 221, 25);
+		btnNewButton.setBounds(12, 227, 221, 25);
 		cmdTab.add(btnNewButton);
+		
+		txtCommandVariables = new JTextField();
+		txtCommandVariables.setBounds(12, 200, 221, 27);
+		cmdTab.add(txtCommandVariables);
+		txtCommandVariables.setColumns(10);
+		
+		lblCommandPreview = new JLabel("Command preview...");
+		lblCommandPreview.setBounds(15, 182, 214, 15);
+		cmdTab.add(lblCommandPreview);
 		lblSignal.setEnabled(false);
 		lblOperator.setEnabled(false);
 		prgSignal.setEnabled(false);
@@ -544,6 +564,10 @@ public class Window extends JFrame {
 	
 	public static void setCommandDescription (String description) {
 		lblCmdDesc.setText("<html><p>" + description + "</p></html>");
+	}
+	
+	public static void setCommandPreview (String preview) {
+		lblCommandPreview.setText("<html><p>"+ preview +"</p></html>");
 	}
 	
 	public static void listCommand(String command) {

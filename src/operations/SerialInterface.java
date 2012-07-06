@@ -53,7 +53,7 @@ import views.Window;
  * To write:
  * 		serialInterface.write("Example message goes here.");
  * 
- * To read:••••••••
+ * To read:
  * 		serialInterface.read();
  * 
  ******************************************************************************

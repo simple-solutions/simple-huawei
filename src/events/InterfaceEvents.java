@@ -11,6 +11,7 @@
  */
 package events;
 
+import models.Command;
 import operations.Application;
 import operations.SerialInterface;
 import views.Window;
@@ -40,9 +41,10 @@ public class InterfaceEvents {
 		SerialInterface.close();
 	}
 	
-	public static void getCommandDescription (int index) {
-		String description = Application.commands[index].getDescription();
-		Window.setCommandDescription(description);
+	public static void getCommandPreview (int index, String templateString) {
+		Command command = Application.commands[index];
+		Window.setCommandDescription(command.getDescription());
+		Window.setCommandPreview(command.template(templateString));
 	}
 	
 	public static void sendCommand (int index) {
