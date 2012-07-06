@@ -189,7 +189,7 @@ public class SerialInterface {
 					
 					if(responseStr.indexOf("+CSQ") != -1) {
 
-						Pattern p = Pattern.compile(".*([0-9]+,[0-9]+).*");
+						Pattern p = Pattern.compile(".*([0-9]{2},[0-9]{2}).*");
 						Matcher m = p.matcher(responseStr);
 						boolean matchFound = m.find();
 						String[] signals = m.group(1).split(",");
