@@ -29,7 +29,7 @@ public class Application {
 		mainWindow.setVisible(true);
 		
 		//Start a status requester.
-		(new Thread(new StatusRequester("AT+CSQ\r", 10000))).start();
+		(new Thread(new StatusRequester("AT+CSQ", 10000))).start();
 		
 		listCommands();
 		listDevices();
