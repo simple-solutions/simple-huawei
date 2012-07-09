@@ -48,7 +48,6 @@ public class InterfaceEvents {
 	}
 	
 	public static void sendCommand (int index) {
-		//TODO do templating stuff here
 		Application.write(Application.commands[index].getMessage());
 	}
 }

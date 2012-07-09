@@ -10,8 +10,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import views.Window;
 
@@ -125,10 +123,13 @@ public class SerialInterface {
 	}
 
 	/**
-	 * Handles the input coming from the serial port. A new line character is
-	 * treated as the end of a block in this example.
-	 */
+	 ******************************************************************************
+	 *                                 SerialReader                               *
+	 ******************************************************************************/
 	public static class SerialReader implements SerialPortEventListener {
+		
+		//Handles the input coming from the serial port. A new line character is
+		//treated as the end of a block in this example.
 		@SuppressWarnings("unused")
 		private byte[] buffer = new byte[1024];
 		private InputStream in;
@@ -162,6 +163,7 @@ public class SerialInterface {
 					//If it does start with the current command and has an OK 
 					//or an ERROR break the loop and send it to the 
 					//receivedData register.
+					System.out.println(responseStr + " starts with " + currentCommand);
 					if(!responseStr.startsWith(currentCommand)) {
 						uc = true;
 						break;
@@ -171,37 +173,17 @@ public class SerialInterface {
 					}
 
 				}
-				
+				//Log this response
 				Window.writeToMonitor("READ: " + responseStr.trim());
+				//Process the command
+				CommandProcessor.process(responseStr);
+				
 				//If the response is solicited.
 				if(!uc) {
-					if(responseStr.indexOf("+COPS") != -1) {
-						
-						Pattern p = Pattern.compile(".*\"(.+)\"");
-						Matcher m = p.matcher(responseStr);
-						boolean matchFound = m.find();
-						
-						if (matchFound) {
-							System.out.println(m.group(1));
-						}
-						
-					}
-					
-					if(responseStr.indexOf("+CSQ") != -1) {
-
-						Pattern p = Pattern.compile(".*([0-9]{2},[0-9]{2}).*");
-						Matcher m = p.matcher(responseStr);
-						boolean matchFound = m.find();
-						String[] signals = m.group(1).split(",");
-						
-						if (matchFound) {
-							Window.updateSignal(Integer.parseInt(signals[0]));
-						}
-						
-					}
 					//Add it to the receiveData register.
 					CommandHandler.receiveData(responseStr);
 				} else {
+					//CommandHandler.receiveData(responseStr);
 					System.out.println("Unsolicited command response!");
 				}
 			} catch (IOException e) {
@@ -210,7 +192,10 @@ public class SerialInterface {
 		}
 	}
 	
-	/** */
+	/**
+	 ******************************************************************************
+	 *                                 SerialWriter                               *
+	 ******************************************************************************/
 	public static class SerialWriter implements Runnable {
 		private OutputStream out;
 		
@@ -231,7 +216,7 @@ public class SerialInterface {
 						this.out.write(waitingCommand.getBytes());
 						// TODO REMOVE DEBUG
 						System.out.println("Command: " + waitingCommand);
-					} 
+					}
 					// TODO REMOVE DEBUG
 					Thread.sleep(100);
 				}
@@ -245,6 +230,10 @@ public class SerialInterface {
 		}
 	}
 	
+	/**
+	 ******************************************************************************
+	 *                                CommandHandler                              *
+	 ******************************************************************************/
 	public static class CommandHandler {
 		
 		private static ArrayList<String> waitingCommands = new ArrayList<String>();
@@ -311,8 +300,8 @@ public class SerialInterface {
 			if(count >= timeout) {
 				return "No data.";
 			} else {
-				response = receivedData.get(0);
-				receivedData.remove(0);
+				response = receivedData.get(receivedData.size() - 1);
+				receivedData.remove(receivedData.size() - 1);
 				
 				return response;
 			}
