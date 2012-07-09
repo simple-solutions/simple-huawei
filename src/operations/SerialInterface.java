@@ -263,7 +263,9 @@ public class SerialInterface {
 		
 		//Get the command that is currently being processed.
 		public static String currentCommand () {
-			return sentCommands.get(0);
+			String current = sentCommands.get(0);
+			//sentCommands.remove(0);
+			return current;
 		}
 		
 		//Checks the state of the commandMode flag.

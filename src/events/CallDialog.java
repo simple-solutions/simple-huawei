@@ -21,6 +21,9 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+import java.awt.Font;
+import java.awt.Color;
 
 public class CallDialog extends JDialog {
 
@@ -60,20 +63,31 @@ public class CallDialog extends JDialog {
 	 * Create the dialog.
 	 */
 	public CallDialog() {
-		setTitle("Call Dialog");
-		setBounds(100, 100, 450, 300);
+		setTitle("Phone");
+		setBounds(100, 100, 389, 159);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("New label");
-		lblNewLabel.setBounds(181, 52, 70, 15);
-		contentPanel.add(lblNewLabel);
+		JLabel lblCallStatus = new JLabel("Incoming call...");
+		lblCallStatus.setForeground(Color.GRAY);
+		lblCallStatus.setBounds(129, 12, 115, 15);
+		contentPanel.add(lblCallStatus);
+		
+		JLabel label = new JLabel("01539431017");
+		label.setFont(new Font("Dialog", Font.BOLD, 40));
+		label.setHorizontalAlignment(SwingConstants.CENTER);
+		label.setBounds(12, 26, 365, 55);
+		contentPanel.add(label);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.CENTER));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
+			
+			JButton btnAnswer = new JButton("Answer Call");
+			btnAnswer.setActionCommand("Cancel");
+			buttonPane.add(btnAnswer);
 			{
 				JButton btnEndCall = new JButton("End Call");
 				btnEndCall.setActionCommand("Cancel");
@@ -81,4 +95,5 @@ public class CallDialog extends JDialog {
 			}
 		}
 	}
+	
 }
