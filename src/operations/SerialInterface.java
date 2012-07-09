@@ -163,7 +163,9 @@ public class SerialInterface {
 					//If it does start with the current command and has an OK 
 					//or an ERROR break the loop and send it to the 
 					//receivedData register.
+					
 					System.out.println(responseStr + " starts with " + currentCommand);
+					//TODO this is where it is all going wrong!
 					if(!responseStr.startsWith(currentCommand)) {
 						uc = true;
 						break;
