@@ -9,7 +9,7 @@
  * 
  * (Description)
  */
-package events;
+package views;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -32,6 +32,11 @@ public class CallDialog extends JDialog {
 	 */
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
+	private static JLabel lblCallStatus;
+	private static JLabel lblNumber;
+	private static JPanel buttonPane;
+	private static JButton btnAnswer;
+	private static JButton btnEndCall;
 
 	/**
 	 * Launch the application.
@@ -70,30 +75,57 @@ public class CallDialog extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		
-		JLabel lblCallStatus = new JLabel("Incoming call...");
+		lblCallStatus = new JLabel("");
 		lblCallStatus.setForeground(Color.GRAY);
 		lblCallStatus.setBounds(129, 12, 115, 15);
 		contentPanel.add(lblCallStatus);
 		
-		JLabel label = new JLabel("01539431017");
-		label.setFont(new Font("Dialog", Font.BOLD, 40));
-		label.setHorizontalAlignment(SwingConstants.CENTER);
-		label.setBounds(12, 26, 365, 55);
-		contentPanel.add(label);
+		lblNumber = new JLabel();
+		lblNumber.setFont(new Font("Dialog", Font.BOLD, 40));
+		lblNumber.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNumber.setBounds(12, 26, 365, 55);
+		contentPanel.add(lblNumber);
 		{
-			JPanel buttonPane = new JPanel();
+			buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.CENTER));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			
-			JButton btnAnswer = new JButton("Answer Call");
+			btnAnswer = new JButton("Answer Call");
 			btnAnswer.setActionCommand("Cancel");
 			buttonPane.add(btnAnswer);
 			{
-				JButton btnEndCall = new JButton("End Call");
+				btnEndCall = new JButton("End Call");
 				btnEndCall.setActionCommand("Cancel");
 				buttonPane.add(btnEndCall);
 			}
 		}
 	}
+	
+	public static void incomingCall (String number) {
+		lblCallStatus.setText("Incoming call.");
+		lblNumber.setText(number);
+		btnAnswer.setEnabled(true);
+		btnEndCall.setEnabled(false);
+	}
+	
+	public static void outgoingCall (String number) {
+		lblCallStatus.setText("Outgoing call.");
+		lblNumber.setText(number);
+		btnAnswer.setEnabled(false);
+		btnEndCall.setEnabled(true);
+	}
+	
+	public static void answered () {
+		lblCallStatus.setText("Call in progress.");
+		btnAnswer.setEnabled(false);
+		btnEndCall.setEnabled(true);
+	}
+	
+	public static void ended () {
+		lblCallStatus.setText("Call ended.");
+		btnAnswer.setEnabled(false);
+		btnEndCall.setEnabled(false);
+	}
+	
 	
 }

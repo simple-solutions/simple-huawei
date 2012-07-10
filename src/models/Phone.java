@@ -9,7 +9,7 @@
  * 
  * (Description)
  */
-package events;
+package models;
 
 import operations.Application;
 

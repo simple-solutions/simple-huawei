@@ -142,7 +142,6 @@ public class SerialInterface {
 			
 			byte[] buffer = new byte[1024];	//Hold port data in buffer
 			int len = -1;					//Number of bytes read
-			boolean uc = false;				//Unsolicited Response flag
 			String responseStr = "";		//String to hold response
 			
 			System.out.println("Serial Event!");
@@ -167,7 +166,6 @@ public class SerialInterface {
 					System.out.println(responseStr + " starts with " + currentCommand);
 					//TODO this is where it is all going wrong!
 					if(!responseStr.startsWith(currentCommand)) {
-						uc = true;
 						break;
 					} else if (responseStr.indexOf("OK") != -1 || 
 							responseStr.indexOf("ERROR") != -1 ) {
@@ -179,15 +177,8 @@ public class SerialInterface {
 				Window.writeToMonitor("READ: " + responseStr.trim());
 				//Process the command
 				CommandProcessor.process(responseStr);
+				CommandHandler.receiveData(responseStr);
 				
-				//If the response is solicited.
-				if(!uc) {
-					//Add it to the receiveData register.
-					CommandHandler.receiveData(responseStr);
-				} else {
-					//CommandHandler.receiveData(responseStr);
-					System.out.println("Unsolicited command response!");
-				}
 			} catch (IOException e) {
 				System.out.println(e.getMessage());
 			}
@@ -241,14 +232,12 @@ public class SerialInterface {
 		private static ArrayList<String> waitingCommands = new ArrayList<String>();
 		private static ArrayList<String> sentCommands = new ArrayList<String>();
 		private static ArrayList<String> receivedData = new ArrayList<String>();
-		private static ArrayList<String> validatedData = new ArrayList<String>();
 		private static boolean commandMode = false;
 		
 		public CommandHandler () {
 			waitingCommands = new ArrayList<String>();
 			sentCommands = new ArrayList<String>();
 			receivedData = new ArrayList<String>();
-			validatedData = new ArrayList<String>();
 		}
 		
 		//Check how many commands are waiting to be sent.
@@ -258,12 +247,12 @@ public class SerialInterface {
 		
 		//Check how many commands are waiting to be sent.
 		public static int availableReceived () {
-			return validatedData.size();
+			return receivedData.size();
 		}
 		
 		//Get the command that is currently being processed.
 		public static String currentCommand () {
-			String current = sentCommands.get(0);
+			String current = sentCommands.get(sentCommands.size() - 1);
 			//sentCommands.remove(0);
 			return current;
 		}
@@ -285,12 +274,6 @@ public class SerialInterface {
 			String response;
 			
 			//Create a small delay that will ensure the command has arrived.
-			/*try {
-				Thread.sleep(200);
-			} catch (InterruptedException e) {
-				System.out.println(e.getMessage());
-			}*/
-			
 			int timeout = 2000, count = 0, interval = 10;
 			
 			while(availableReceived() <= 0 || count >= timeout) {

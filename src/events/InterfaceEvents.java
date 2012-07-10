@@ -12,6 +12,7 @@
 package events;
 
 import models.Command;
+import models.Phone;
 import operations.Application;
 import operations.SerialInterface;
 import views.Window;
