@@ -25,11 +25,12 @@ public class Application {
 	public static Command[] commands;
 	
 	public static void main (String[] args) {
+		
 		Window mainWindow = new Window();
 		mainWindow.setVisible(true);
 		
 		//Start a status requester.
-		//(new Thread(new StatusRequester("AT+CSQ", 10000))).start();
+		(new Thread(new StatusRequester("AT+CSQ;+COPS?", 10000))).start();
 		
 		listCommands();
 		listDevices();
@@ -52,18 +53,25 @@ public class Application {
 	}
 	
 	public static void listDevices () {
-		@SuppressWarnings("unchecked")
-		java.util.Enumeration<CommPortIdentifier> portEnum = CommPortIdentifier.getPortIdentifiers();
+		
 		ArrayList<String> devices = new ArrayList<String>();
+		
+		@SuppressWarnings("unchecked")
+		java.util.Enumeration<CommPortIdentifier> portEnum = CommPortIdentifier
+			.getPortIdentifiers();
+		
+		
 		//Create the list of devices
         while (portEnum.hasMoreElements()) {
             CommPortIdentifier portIdentifier = portEnum.nextElement();
             devices.add(portIdentifier.getName());
         }
+        
         //Then add them in reverse order to the combo box.
         for(int i = devices.size() - 1; i >= 0; i--) {
         	Window.listDevice(devices.get(i));
         }
+        
 	}
 	
 	public static void deviceConfig () {

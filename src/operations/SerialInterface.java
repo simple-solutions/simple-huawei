@@ -80,7 +80,7 @@ public class SerialInterface {
 			serialPort = (SerialPort) commPort;
 			//Port configuration options.
 			serialPort.setSerialPortParams(
-					115200, 					//Baud rate.
+					115200,						//Baud rate.
 					SerialPort.DATABITS_8,		//8 Data bits.
 					SerialPort.STOPBITS_1, 		//1 Stop bit.
 					SerialPort.PARITY_NONE);	//No parity.
@@ -163,7 +163,7 @@ public class SerialInterface {
 					//or an ERROR break the loop and send it to the 
 					//receivedData register.
 					
-					System.out.println(responseStr + " starts with " + currentCommand);
+					System.out.println("len: " + len);
 					//TODO this is where it is all going wrong!
 					if(!responseStr.startsWith(currentCommand)) {
 						break;

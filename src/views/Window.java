@@ -87,7 +87,8 @@ public class Window extends JFrame {
 		}
 		
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Window.class.
-				getResource("/com/sun/java/swing/plaf/windows/icons/Computer.gif")));
+				getResource("/com/sun/java/swing/plaf/windows/icons/" +
+						"Computer.gif")));
 		setTitle("Huawei Interface");
 		setResizable(false);
 		
@@ -497,7 +498,9 @@ public class Window extends JFrame {
 		lstCommands.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent arg0) {
 				commandIndex = arg0.getFirstIndex();
-				InterfaceEvents.getCommandPreview(commandIndex, txtCommandVariables.getText());
+				System.out.println(commandIndex);
+				InterfaceEvents.getCommandPreview(commandIndex, 
+						txtCommandVariables.getText());
 				
 			}
 		});
@@ -578,8 +581,12 @@ public class Window extends JFrame {
         cmbDevice.addItem(device);
 	}
 	
-	public static void updateSignal (int signal) {
+	public static void setSignal (int signal) {
 		prgSignal.setValue(signal);
+	}
+	
+	public static void setOperator (String operator) {
+		lblOperator.setText("Operator: " + operator);
 	}
 	
 	public static void writeToMonitor (String message) {
