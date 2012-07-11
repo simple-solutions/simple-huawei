@@ -29,6 +29,10 @@ public class InterfaceEvents {
 
 	}
 	
+	public static void sendSms(String number, String message) {
+		Phone.sendSms(number, message);
+	}
+	
 	public static void dial (String number) {
 		Phone.dial(number);
 	}

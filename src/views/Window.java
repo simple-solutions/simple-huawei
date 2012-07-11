@@ -70,6 +70,7 @@ public class Window extends JFrame {
 	private static JPanel cmdTab;
 	public static JList lstCommands;
 	private JTextField txtCommandVariables;
+	private JTextField txtSmsNumber;
 	
 	
 	public Window() {
@@ -276,14 +277,20 @@ public class Window extends JFrame {
 		lblCharCount = new JLabel("(160 characters left)");
 		lblCharCount.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCharCount.setForeground(new Color(128, 128, 128));
-		lblCharCount.setBounds(12, 188, 220, 15);
+		lblCharCount.setBounds(12, 232, 220, 15);
 		smsTab.add(lblCharCount);
 				
 		
 		btnSendSms = new JButton("Send");
+		btnSendSms.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				InterfaceEvents.sendSms(txtSmsNumber.getText(),txtAreaSms.getText());
+			}
+		});
 		btnSendSms.setIcon(new ImageIcon(Window.class.getResource
 				("/javax/swing/plaf/metal/icons/ocean/upFolder.gif")));
-		btnSendSms.setBounds(63, 215, 117, 25);
+		btnSendSms.setBounds(63, 259, 117, 25);
 		smsTab.add(btnSendSms);
 		
 		scrollPane_1 = new JScrollPane();
@@ -293,7 +300,7 @@ public class Window extends JFrame {
 				EtchedBorder.LOWERED, null, null));
 		scrollPane_1.setHorizontalScrollBarPolicy(
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane_1.setBounds(12, 12, 220, 164);
+		scrollPane_1.setBounds(12, 56, 220, 164);
 		smsTab.add(scrollPane_1);
 		
 		txtAreaSms = new JTextArea();
@@ -311,6 +318,17 @@ public class Window extends JFrame {
 			}
 		});
 		scrollPane_1.setViewportView(txtAreaSms);
+		
+		txtSmsNumber = new JTextField();
+		txtSmsNumber.setBounds(73, 24, 157, 28);
+		smsTab.add(txtSmsNumber);
+		txtSmsNumber.setColumns(10);
+		
+		JLabel lblPhone = new JLabel("Phone: ");
+		lblPhone.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPhone.setForeground(Color.GRAY);
+		lblPhone.setBounds(12, 32, 66, 15);
+		smsTab.add(lblPhone);
 		
 		tcpTab = new JPanel();
 		tabbedPane.addTab("TCP/UDP", null, tcpTab, null);
@@ -534,7 +552,6 @@ public class Window extends JFrame {
 		lblSignal.setEnabled(false);
 		lblOperator.setEnabled(false);
 		prgSignal.setEnabled(false);
-		
 		
 		/********************************************
 		 *               SHUTDOWN HOOK              *

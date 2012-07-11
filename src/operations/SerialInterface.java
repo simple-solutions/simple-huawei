@@ -171,6 +171,7 @@ public class SerialInterface {
 					//receivedData register.
 					
 					System.out.println("len: " + len);
+					System.out.println(responseStr);
 					//TODO this is where it is all going wrong!
 					if(!responseStr.startsWith(currentCommand)) {
 						break;

@@ -45,9 +45,8 @@ public class Phone {
 	
 	
 	public static void sendSms (String number, String message) {
-		Application.write("at+cmgs=\" + message + \"");
-		//Write message
-		//Terminate with ctrl-z (0x1A)
-		
+		Application.write("at+cmgs=\"" + number + "\"");
+	    Application.write(message);
+		Application.write("\\x1A");
 	}
 }
