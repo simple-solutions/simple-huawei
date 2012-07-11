@@ -22,6 +22,7 @@ import operations.ConfigReader;
 public class Application {
 	
 	public static boolean connected;
+	public static boolean logging;
 	public static Command[] commands;
 	
 	public static void main (String[] args) {
@@ -29,27 +30,39 @@ public class Application {
 		Window mainWindow = new Window();
 		mainWindow.setVisible(true);
 		
-		//Start a status requester.
-		(new Thread(new StatusRequester("AT+CSQ;+COPS?", 10000))).start();
 		
+		
+		//Lists the current command set and the available devices in window.
 		listCommands();
 		listDevices();
+		
+		//
 	}
 	
+	/******************************
+	 *         W R I T E          *
+	 ******************************/
 	public static void write (String message) {
-		SerialInterface.write(message);
-		Window.writeToMonitor("WRITE: " + message);
+		if(connected) {
+			SerialInterface.write(message);
+			Window.writeToMonitor("WRITE: " + message);
+		}
 	}
 	
+	/******************************
+	 *           R E A D          *
+	 ******************************/
 	public static String read () {
 		return SerialInterface.read();
 	}
 	
 	public static void listCommands () {
+		
 		commands = ConfigReader.read();
 		for(int i = 0; i < commands.length; i++) {
 			Window.listCommand(commands[i].getName());
 		}
+		
 	}
 	
 	public static void listDevices () {
@@ -77,37 +90,6 @@ public class Application {
 	public static void deviceConfig () {
 		//Turn on incoming call information
 		SerialInterface.write("AT+CLIP=1");
-	}
-	
-	/**
-	 * Sends a status request command to the device at a interval
-	 * defined in the constructor.
-	 * @author simple-developer
-	 *
-	 */
-	public static class StatusRequester implements Runnable {
-		private String command;
-		private int interval;
-		
-		public StatusRequester (String command, int interval) {
-			this.command = command;
-			this.interval = interval;
-		}
-		
-		public void run() {
-			while(true) {
-				try {
-					write(this.command);
-					Thread.sleep(interval);
-				} catch (InterruptedException e) {
-					System.out.println(e.getMessage());
-				}
-				if(!Application.connected) {
-					break;
-				}
-			}
-		}
-		
 	}
         
 }

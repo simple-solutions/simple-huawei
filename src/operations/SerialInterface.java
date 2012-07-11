@@ -66,6 +66,7 @@ public class SerialInterface {
 	public static void connect(String portName) throws Exception {
 		
 		System.out.println("Connecting to " + portName);
+		Window.writeToMonitor("LOG: Attempting to connect to " + portName);
 		
 		//Create a port identifier from the port's name.
 		CommPortIdentifier portId = CommPortIdentifier.
@@ -94,6 +95,12 @@ public class SerialInterface {
 			//Add the event listener to the serial port object.
 			serialPort.addEventListener(new SerialReader(in));
 			serialPort.notifyOnDataAvailable(true);
+			
+			Application.connected = true;
+			Window.writeToMonitor("LOG: Successfully connected to " + portName);
+			
+			//Start a status requester.
+			(new Thread(new StatusRequester("AT+CSQ;+COPS?", 10000))).start();
 		}
 	}
 	

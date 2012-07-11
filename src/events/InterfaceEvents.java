@@ -22,7 +22,6 @@ public class InterfaceEvents {
 	public static void connect (String portName) {
 		
 		try {
-			Window.writeToMonitor("LOG: Attempting to connect to " + portName);
 			SerialInterface.connect(portName);
 		} catch (Exception e) {
 			e.printStackTrace();
