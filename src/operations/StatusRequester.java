@@ -24,7 +24,7 @@ public class StatusRequester implements Runnable {
 	public void run() {
 		while(true) {
 			try {
-				if(Application.connected) {
+				if(Application.connected && !Application.busy) {
 					Application.write(this.command);
 				}
 				Thread.sleep(interval);

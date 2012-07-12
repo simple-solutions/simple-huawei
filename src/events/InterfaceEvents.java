@@ -30,7 +30,7 @@ public class InterfaceEvents {
 	}
 	
 	public static void sendSms(String number, String message) {
-		Phone.sendSms(number, message);
+		Phone.startSms(number, message);
 	}
 	
 	public static void dial (String number) {

@@ -98,7 +98,7 @@ public class SerialInterface {
 			
 			Application.connected = true;
 			Window.writeToMonitor("LOG: Successfully connected to " + portName);
-			
+			Application.deviceConfig();
 			//Start a status requester.
 			(new Thread(new StatusRequester("AT+CSQ;+COPS?", 10000))).start();
 		}
@@ -170,8 +170,6 @@ public class SerialInterface {
 					//or an ERROR break the loop and send it to the 
 					//receivedData register.
 					
-					System.out.println("len: " + len);
-					System.out.println(responseStr);
 					//TODO this is where it is all going wrong!
 					if(!responseStr.startsWith(currentCommand)) {
 						break;

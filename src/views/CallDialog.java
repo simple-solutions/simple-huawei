@@ -22,8 +22,15 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+
+import operations.Application;
+
+import models.Phone;
+
 import java.awt.Font;
 import java.awt.Color;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class CallDialog extends JDialog {
 
@@ -91,10 +98,25 @@ public class CallDialog extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			
 			btnAnswer = new JButton("Answer Call");
+			btnAnswer.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					Phone.answer();
+				}
+			});
 			btnAnswer.setActionCommand("Cancel");
 			buttonPane.add(btnAnswer);
 			{
 				btnEndCall = new JButton("End Call");
+				btnEndCall.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						if(Phone.isInCall()) {
+							Phone.hangUp();
+						}
+						Application.callDialog.setVisible(false);
+					}
+				});
 				btnEndCall.setActionCommand("Cancel");
 				buttonPane.add(btnEndCall);
 			}

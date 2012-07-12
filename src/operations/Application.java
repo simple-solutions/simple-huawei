@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import gnu.io.CommPortIdentifier;
 
 import models.Command;
+import views.CallDialog;
 import views.Window;
 import operations.ConfigReader;
 
@@ -23,20 +24,16 @@ public class Application {
 	
 	public static boolean connected;
 	public static boolean logging;
+	public static boolean busy;
 	public static Command[] commands;
+	public static CallDialog callDialog = new CallDialog();
+	public static Window window = new Window();
 	
 	public static void main (String[] args) {
-		
-		Window mainWindow = new Window();
-		mainWindow.setVisible(true);
-		
-		
-		
+		window.setVisible(true);
 		//Lists the current command set and the available devices in window.
 		listCommands();
 		listDevices();
-		
-		//
 	}
 	
 	/******************************

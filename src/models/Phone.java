@@ -12,10 +12,12 @@
 package models;
 
 import operations.Application;
+import views.CallDialog;
 
 public class Phone {
 	
 	private static String number;
+	private static String message;
 	private static boolean inCall;
 	
 	public static boolean isInCall () {
@@ -26,6 +28,7 @@ public class Phone {
 	public static void dial (String newNumber) {
 		number = newNumber;
 		inCall = true;
+		Application.busy = true;
 		Application.write("ATD" + number + ";");
 	}
 	
@@ -34,19 +37,27 @@ public class Phone {
 		if(inCall) {
 			hangUp();
 		}
+		Application.busy = true;
 		Application.write("ATA");
+		CallDialog.answered();
 		inCall = true;
 	}
 	
 	public static void hangUp () {
 		Application.write("ATH");
+		Application.busy = false;
 		inCall = false;
 	}
 	
+	public static void sendMessage() {
+		Application.write(message);
+		//Application.write(0x26);
+		Application.busy = false;
+	}
 	
-	public static void sendSms (String number, String message) {
+	public static void startSms (String number, String smsMessage) {
+		Application.busy = true;
+		message = smsMessage;
 		Application.write("at+cmgs=\"" + number + "\"");
-	    Application.write(message);
-		Application.write("\\x1A");
 	}
 }
