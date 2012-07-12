@@ -67,13 +67,16 @@ public class CommandProcessor {
 			System.out.println(matchFound);
 			if(matchFound) {
 				String number = m.group(1);
-				//TODO Fire up the call dialog and show the incoming number.
+				//Fire up the call dialog and show the incoming number.
 				CallDialog.incomingCall(number);
 				Application.callDialog.setVisible(true);
 			}
 		}
 		
-		if(response.startsWith(">")) {
+		//If the device is prompting for SMS sending, then send the message
+		//currently stored in the phone.
+		if(response.indexOf(">") != -1) {
+			System.out.println("Here comes the prompt!");
 			Phone.sendMessage();
 		}
 

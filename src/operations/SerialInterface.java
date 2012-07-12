@@ -100,7 +100,7 @@ public class SerialInterface {
 			Window.writeToMonitor("LOG: Successfully connected to " + portName);
 			Application.deviceConfig();
 			//Start a status requester.
-			(new Thread(new StatusRequester("AT+CSQ;+COPS?", 10000))).start();
+			(new Thread(new StatusRequester("AT+CSQ;+COPS?", 60000))).start();
 		}
 	}
 	

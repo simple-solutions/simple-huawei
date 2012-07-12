@@ -12,6 +12,8 @@
  */
 package operations;
 
+import views.Window;
+
 public class StatusRequester implements Runnable {
 	private String command;
 	private int interval;
@@ -25,6 +27,7 @@ public class StatusRequester implements Runnable {
 		while(true) {
 			try {
 				if(Application.connected && !Application.busy) {
+					Window.writeToMonitor("LOG: Status request.");
 					Application.write(this.command);
 				}
 				Thread.sleep(interval);
