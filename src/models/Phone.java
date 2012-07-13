@@ -43,6 +43,8 @@ public class Phone {
 		inCall = true;
 	}
 	
+	//End the phone call with an ATH, set the busy status and inCall 
+	//status to false.
 	public static void hangUp () {
 		Application.write("ATH");
 		Application.busy = false;

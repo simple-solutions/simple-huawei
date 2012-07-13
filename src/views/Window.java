@@ -9,6 +9,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 import events.InterfaceEvents;
 
@@ -71,12 +73,20 @@ public class Window extends JFrame {
 	public static JList lstCommands;
 	private JTextField txtCommandVariables;
 	private JTextField txtSmsNumber;
+	private JComboBox cmbProtocol;
+	private JTextField txtTcpAddress;
+	private JTextField txtTcpPort;
+	private JTextArea txtTcpMessage;
+	private JLabel lblInstructionsQuick;
 	
 	
 	public Window() {
 		
 		// Get the native look and feel class name
 		String nativeLF = UIManager.getSystemLookAndFeelClassName();
+		
+		@SuppressWarnings("unused")
+		SplashScreen sw = new SplashScreen();
 		
 		// Install the look and feel
 		try {
@@ -118,7 +128,7 @@ public class Window extends JFrame {
 		pnlPhoneKeypad.setBackground(SystemColor.menu);
 		pnlPhoneKeypad.setBorder(new EtchedBorder(EtchedBorder.LOWERED, 
 				null, null));
-		pnlPhoneKeypad.setBounds(0, 0, 245, 187);
+		pnlPhoneKeypad.setBounds(0, 0, 245, 215);
 		phoneTab.add(pnlPhoneKeypad);
 		pnlPhoneKeypad.setLayout(null);
 		
@@ -126,11 +136,11 @@ public class Window extends JFrame {
 		pnlButtonsContainer.setBackground(SystemColor.control);
 		pnlButtonsContainer.setBorder(new EtchedBorder(EtchedBorder.RAISED,
 				null, null));
-		pnlButtonsContainer.setBounds(78, 44, 97, 137);
+		pnlButtonsContainer.setBounds(49, 44, 151, 148);
 		pnlPhoneKeypad.add(pnlButtonsContainer);
 		pnlButtonsContainer.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		phoneButton1 = new JButton("1");
+		phoneButton1 = new JButton("  1  ");
 		phoneButton1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -139,7 +149,7 @@ public class Window extends JFrame {
 		});
 		pnlButtonsContainer.add(phoneButton1);
 		
-		phoneButton2 = new JButton("2");
+		phoneButton2 = new JButton("  2  ");
 		phoneButton2.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -148,7 +158,7 @@ public class Window extends JFrame {
 		});
 		pnlButtonsContainer.add(phoneButton2);
 		
-		phoneButton3 = new JButton("3");
+		phoneButton3 = new JButton("  3  ");
 		phoneButton3.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -157,7 +167,7 @@ public class Window extends JFrame {
 		});
 		pnlButtonsContainer.add(phoneButton3);
 		
-		phoneButton4 = new JButton("4");
+		phoneButton4 = new JButton("  4  ");
 		phoneButton4.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -167,7 +177,7 @@ public class Window extends JFrame {
 		});
 		pnlButtonsContainer.add(phoneButton4);
 		
-		phoneButton5 = new JButton("5");
+		phoneButton5 = new JButton("  5  ");
 		phoneButton5.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -176,7 +186,7 @@ public class Window extends JFrame {
 		});
 		pnlButtonsContainer.add(phoneButton5);
 		
-		phoneButton6 = new JButton("6");
+		phoneButton6 = new JButton("  6  ");
 		phoneButton6.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -185,7 +195,7 @@ public class Window extends JFrame {
 		});
 		pnlButtonsContainer.add(phoneButton6);
 		
-		phoneButton7 = new JButton("7");
+		phoneButton7 = new JButton("  7  ");
 		phoneButton7.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -194,7 +204,7 @@ public class Window extends JFrame {
 		});
 		pnlButtonsContainer.add(phoneButton7);
 		
-		phoneButton8 = new JButton("8");
+		phoneButton8 = new JButton("  8  ");
 		phoneButton8.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -203,7 +213,7 @@ public class Window extends JFrame {
 		});
 		pnlButtonsContainer.add(phoneButton8);
 		
-		phoneButton9 = new JButton("9");
+		phoneButton9 = new JButton("  9  ");
 		phoneButton9.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -212,18 +222,36 @@ public class Window extends JFrame {
 		});
 		pnlButtonsContainer.add(phoneButton9);
 		
-		phoneButton0 = new JButton("0");
+		phoneButton0 = new JButton("  0  ");
 		phoneButton0.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				txtPhoneDisplay.setText(txtPhoneDisplay.getText() + "0");
 			}
 		});
+		
+		JButton phoneButtonStar = new JButton("   *  ");
+		phoneButtonStar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				txtPhoneDisplay.setText(txtPhoneDisplay.getText() + "*");
+			}
+		});
+		pnlButtonsContainer.add(phoneButtonStar);
 		pnlButtonsContainer.add(phoneButton0);
+		
+		JButton phoneButtonHash = new JButton("  #  ");
+		phoneButtonHash.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				txtPhoneDisplay.setText(txtPhoneDisplay.getText() + "#");
+			}
+		});
+		pnlButtonsContainer.add(phoneButtonHash);
 		contentPane.setLayout(new GridLayout(0, 1, 0, 0));
 				
 		pnlPhoneActions = new JPanel();
-		pnlPhoneActions.setBounds(34, 213, 178, 35);
+		pnlPhoneActions.setBounds(32, 260, 178, 35);
 		phoneTab.add(pnlPhoneActions);
 		
 		btnDial = new JButton("Dial");
@@ -256,17 +284,17 @@ public class Window extends JFrame {
 				btnEnd.setEnabled(false);
 				btnDial.setEnabled(true);
 				/* END THE CALL */
-				//InterfaceEvents.hang();
+				InterfaceEvents.hang();
 			}
 		});
 		
 		lblCallStatus = new JLabel("Waiting...");
 		lblCallStatus.setForeground(new Color(128, 128, 128));
-		lblCallStatus.setBounds(91, 199, 70, 15);
+		lblCallStatus.setBounds(89, 246, 70, 15);
 		phoneTab.add(lblCallStatus);
 		
 		txtPhoneDisplay = new JTextField();
-		txtPhoneDisplay.setBounds(39, 12, 174, 27);
+		txtPhoneDisplay.setBounds(49, 12, 151, 27);
 		pnlPhoneKeypad.add(txtPhoneDisplay);
 		txtPhoneDisplay.setColumns(10);
 		
@@ -285,7 +313,7 @@ public class Window extends JFrame {
 		btnSendSms.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				InterfaceEvents.sendSms(txtSmsNumber.getText(),txtAreaSms.getText());
+				InterfaceEvents.sendSms("",txtAreaSms.getText());
 			}
 		});
 		btnSendSms.setIcon(new ImageIcon(Window.class.getResource
@@ -332,6 +360,55 @@ public class Window extends JFrame {
 		
 		tcpTab = new JPanel();
 		tabbedPane.addTab("TCP/UDP", null, tcpTab, null);
+		tcpTab.setLayout(null);
+		
+		cmbProtocol = new JComboBox();
+		cmbProtocol.setModel(new DefaultComboBoxModel(new String[] {"TCP", "UDP"}));
+		cmbProtocol.setBounds(87, 12, 145, 28);
+		tcpTab.add(cmbProtocol);
+		
+		JLabel lblProtocol = new JLabel("Protocol: ");
+		lblProtocol.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblProtocol.setBounds(12, 17, 75, 18);
+		tcpTab.add(lblProtocol);
+		
+		JScrollPane scrollPane_3 = new JScrollPane();
+		scrollPane_3.setViewportBorder(new EtchedBorder(
+						EtchedBorder.LOWERED, null, null));
+		scrollPane_3.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane_3.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane_3.setBounds(12, 107, 220, 164);
+		tcpTab.add(scrollPane_3);
+		
+		txtTcpMessage = new JTextArea();
+		scrollPane_3.setViewportView(txtTcpMessage);
+		
+		//scrollPane_3.setViewportView();
+		
+		JLabel lblAddress = new JLabel("Address:");
+		lblAddress.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblAddress.setBounds(12, 47, 70, 18);
+		tcpTab.add(lblAddress);
+		
+		JLabel lblPort = new JLabel("Port: ");
+		lblPort.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblPort.setBounds(12, 77, 70, 18);
+		tcpTab.add(lblPort);
+		
+		txtTcpAddress = new JTextField();
+		txtTcpAddress.setBounds(87, 42, 145, 28);
+		tcpTab.add(txtTcpAddress);
+		txtTcpAddress.setColumns(10);
+		
+		txtTcpPort = new JTextField();
+		txtTcpPort.setColumns(10);
+		txtTcpPort.setBounds(87, 72, 145, 28);
+		tcpTab.add(txtTcpPort);
+		
+		JButton btnTcpSend = new JButton("Send");
+		btnTcpSend.setIcon(new ImageIcon(Window.class.getResource("/javax/swing/plaf/metal/icons/ocean/upFolder.gif")));
+		btnTcpSend.setBounds(75, 290, 96, 30);
+		tcpTab.add(btnTcpSend);
 		
 		pnlOptions = new JPanel();
 		pnlWrapper.add(pnlOptions);
@@ -552,6 +629,30 @@ public class Window extends JFrame {
 		lblSignal.setEnabled(false);
 		lblOperator.setEnabled(false);
 		prgSignal.setEnabled(false);
+		
+		lblInstructionsQuick = new JLabel("Instructions & Quick Start");
+		lblInstructionsQuick.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblInstructionsQuick.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				try {
+					java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
+    	            java.net.URI uri = new java.net.URI("http://simple-solutions.github.com/SimpleHuawei");
+					desktop.browse( uri );
+				} catch (URISyntaxException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException ex) {
+					// TODO Auto-generated catch block
+					ex.printStackTrace();
+				}
+			}
+		});
+		lblInstructionsQuick.setForeground(UIManager.getColor("MenuItem.selectionBackground"));
+		lblInstructionsQuick.setFont(new Font("Ubuntu", Font.PLAIN, 15));
+		lblInstructionsQuick.setHorizontalAlignment(SwingConstants.CENTER);
+		lblInstructionsQuick.setBounds(12, 144, 225, 18);
+		pnlControls.add(lblInstructionsQuick);
 		
 		/********************************************
 		 *               SHUTDOWN HOOK              *
