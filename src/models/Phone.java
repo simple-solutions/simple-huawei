@@ -51,12 +51,15 @@ public class Phone {
 		inCall = false;
 	}
 	
+	//After we have received the prompt send the message
 	public static void sendMessage() {
 		Application.write(message);
+		//Then terminate with ^Z
 		//Application.write(0x26);
 		Application.busy = false;
 	}
 	
+	//Send the initial command for SMS.
 	public static void startSms (String number, String smsMessage) {
 		Application.busy = true;
 		message = smsMessage;

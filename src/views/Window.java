@@ -406,6 +406,16 @@ public class Window extends JFrame {
 		tcpTab.add(txtTcpPort);
 		
 		JButton btnTcpSend = new JButton("Send");
+		btnTcpSend.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				String protocol = (String) cmbProtocol.getSelectedItem();
+				String address = txtTcpAddress.getText();
+				String port = txtTcpPort.getText();
+				String message = txtTcpMessage.getText();
+				InterfaceEvents.sendTcpMessage(protocol, address, port, message);
+			}
+		});
 		btnTcpSend.setIcon(new ImageIcon(Window.class.getResource("/javax/swing/plaf/metal/icons/ocean/upFolder.gif")));
 		btnTcpSend.setBounds(75, 290, 96, 30);
 		tcpTab.add(btnTcpSend);

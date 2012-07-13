@@ -45,6 +45,13 @@ public class InterfaceEvents {
 		SerialInterface.close();
 	}
 	
+	public static void sendTcpMessage (String protocol, String address, String port, String message) {
+		
+	}
+	
+	
+	//Get the description and the templated version of the command
+	//and show it in the interface.
 	public static void getCommandPreview (int index, String templateString) {
 		Command command = Application.commands[index];
 		Window.setCommandDescription(command.getDescription());
