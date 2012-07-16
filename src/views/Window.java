@@ -664,6 +664,8 @@ public class Window extends JFrame {
 		lblInstructionsQuick.setBounds(12, 144, 225, 18);
 		pnlControls.add(lblInstructionsQuick);
 		
+		
+		
 		/********************************************
 		 *               SHUTDOWN HOOK              *
 		 ********************************************/

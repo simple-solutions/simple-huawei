@@ -26,7 +26,7 @@ public class ConfigReader {
 			//Catch read exceptions
 			try {
 				//Create our input as a buffered reader aimed at our path
-			    BufferedReader in = new BufferedReader(new FileReader("model/commandSet.config"));
+			    BufferedReader in = new BufferedReader(new FileReader("commandSet.config"));
 			    String str;
 			    //While there are lines in the buffer, add them to our readData string.
 			    while ((str = in.readLine()) != null) {

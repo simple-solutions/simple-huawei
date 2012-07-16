@@ -16,6 +16,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 
 import javax.swing.*;
@@ -26,9 +27,25 @@ class SplashScreen extends JFrame{
 
 		public SplashScreen() {
         	JWindow window = new JWindow();
-        	JLabel image = new JLabel(new ImageIcon("model/Splash-screen2.png"));
-        	image.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        	JLabel image = null;
         	
+        	
+        	String in = this.getClass().getClassLoader().getResource("Splash-screen2.png").getPath();
+
+        	/*byte[] buffer;
+			try {
+				buffer = new byte[in.available()];
+				in.read(buffer);  
+				image = new JLabel(new ImageIcon(buffer));
+			} catch (IOException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}*/
+        	
+        	image = new JLabel(new ImageIcon(this.getClass().getResource("resources/Splash-screen2.png")));
+
+        	
+        	image.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             
             image.addMouseListener(new MouseAdapter() {
     			@Override

@@ -75,7 +75,7 @@ public class Application {
         while (portEnum.hasMoreElements()) {
             CommPortIdentifier portIdentifier = portEnum.nextElement();
             devices.add(portIdentifier.getName());
-        }
+        }	
         
         //Then add them in reverse order to the combo box.
         for(int i = devices.size() - 1; i >= 0; i--) {
