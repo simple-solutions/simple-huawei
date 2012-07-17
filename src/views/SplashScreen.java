@@ -13,11 +13,6 @@ package views;
 
 import javax.swing.JWindow;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URISyntaxException;
 
 import javax.swing.*;
 
@@ -35,9 +30,9 @@ class SplashScreen extends JFrame{
         	window.getContentPane().add(image);
         	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         	window.setBounds(screenSize.width / 2 - 250, screenSize.height / 2 - 150, 500, 300);
+        	 
         	
-        	
-        	window.setVisible(true);
+            window.setVisible(true);
         	try {
         		Thread.sleep(5000);
         	} catch (InterruptedException e) {
