@@ -3,6 +3,7 @@ package operations;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import models.Command;
@@ -26,7 +27,8 @@ public class ConfigReader {
 			//Catch read exceptions
 			try {
 				//Create our input as a buffered reader aimed at our path
-			    BufferedReader in = new BufferedReader(new FileReader("commandSet.config"));
+				String config = ConfigReader.class.getResource("/commandSet.config").getPath().replaceFirst("!", "");
+			    BufferedReader in = new BufferedReader(new FileReader(config));
 			    String str;
 			    //While there are lines in the buffer, add them to our readData string.
 			    while ((str = in.readLine()) != null) {
@@ -42,6 +44,15 @@ public class ConfigReader {
 			}
 			//Otherwise return our files contents.
 			return _getStaticArray();
+		}
+
+		/**
+		 * @param string
+		 * @return
+		 */
+		private static char[] getResource(String string) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 		
 		

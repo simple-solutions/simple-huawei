@@ -32,8 +32,8 @@ public class Application {
 	public static void main (String[] args) {
 		window.setVisible(true);
 		//Lists the current command set and the available devices in window.
-		listCommands();
 		listDevices();
+		listCommands();
 	}
 	
 	/******************************
