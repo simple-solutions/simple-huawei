@@ -55,7 +55,7 @@ public class Phone {
 	public static void sendMessage() {
 		Application.write(message);
 		//Then terminate with ^Z
-		//Application.write(0x26);
+		Application.write(Keys.CTRL_Z);
 		Application.busy = false;
 	}
 	

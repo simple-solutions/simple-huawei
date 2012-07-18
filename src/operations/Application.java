@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import gnu.io.CommPortIdentifier;
 
 import models.Command;
+import models.Keys;
 import views.CallDialog;
 import views.Window;
 import operations.ConfigReader;
@@ -43,6 +44,13 @@ public class Application {
 		if(connected) {
 			SerialInterface.write(message);
 			Window.writeToMonitor("WRITE: " + message);
+		}
+	}
+	
+	public static void write (char ch) {
+		if(connected) {
+			SerialInterface.write(ch);
+			Window.writeToMonitor("WRITE: " + ch);
 		}
 	}
 	
@@ -88,7 +96,7 @@ public class Application {
 		//Turn on incoming call information
 		SerialInterface.write("AT+CLIP=1");
 		//Send an escape key to stop current mode.
-		SerialInterface.write("0x1b");
+		SerialInterface.write(Keys.ESC);
 	}
         
 }

@@ -313,7 +313,7 @@ public class Window extends JFrame {
 		btnSendSms.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				InterfaceEvents.sendSms("",txtAreaSms.getText());
+				InterfaceEvents.sendSms(txtSmsNumber.getText(),txtAreaSms.getText());
 			}
 		});
 		btnSendSms.setIcon(new ImageIcon(Window.class.getResource

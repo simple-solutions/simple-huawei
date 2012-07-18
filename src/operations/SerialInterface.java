@@ -124,6 +124,10 @@ public class SerialInterface {
 		CommandHandler.addCommand(message + "\r");
 	}
 	
+	public static void write (char ch) {
+		CommandHandler.addCommand(ch);
+	}
+	
 	//Read from the serial port.
 	public static String read () {
 		return CommandHandler.getResponse();
@@ -206,6 +210,12 @@ public class SerialInterface {
 			try {
 				//Infinite loop to wait for commands.
 				while(true) {
+					if(CommandHandler.rawAvailable()) {
+						this.out.write(CommandHandler.character);
+						this.out.write('\r');
+						CommandHandler.character = 0;
+						CommandHandler.rawAvailable = false;
+					}
 					//If there are commands waiting.
 					if(CommandHandler.availableCommands() > 0) {
 						//Get the waiting command and move it into the sent 
@@ -238,7 +248,9 @@ public class SerialInterface {
 		private static ArrayList<String> waitingCommands = new ArrayList<String>();
 		private static ArrayList<String> sentCommands = new ArrayList<String>();
 		private static ArrayList<String> receivedData = new ArrayList<String>();
+		public static char character;
 		private static boolean commandMode = false;
+		private static boolean rawAvailable = false;
 		
 		public CommandHandler () {
 			waitingCommands = new ArrayList<String>();
@@ -268,10 +280,20 @@ public class SerialInterface {
 			return commandMode;
 		}
 		
+		//Checks the state of the commandMode flag.
+		public static boolean rawAvailable() {
+			return rawAvailable;
+		}
+		
 		//Add a command to the waiting list.
 		public static void addCommand (String command) {
-			
 			waitingCommands.add(command);
+		}
+		
+		//Overload for raw data.
+		public static void addCommand (char ch) {
+			character = ch;
+			rawAvailable = true;
 		}
 		
 		//Get the response at the top of the received data register and remove 
