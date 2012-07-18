@@ -28,13 +28,16 @@ public class Application {
 	public static boolean busy;
 	public static Command[] commands;
 	public static CallDialog callDialog = new CallDialog();
+	public static String OS_NAME = System.getProperty("os.name");
 	public static Window window = new Window();
+	
 	
 	public static void main (String[] args) {
 		window.setVisible(true);
 		//Lists the current command set and the available devices in window.
 		listDevices();
 		listCommands();
+		
 	}
 	
 	/******************************

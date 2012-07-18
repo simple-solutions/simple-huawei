@@ -32,7 +32,7 @@ public class ConfigReader {
 				
 				File file = new File(ConfigReader.class.getProtectionDomain().getCodeSource().getLocation().getFile());          
 	            String path = file.getParent() + File.separator + "commandSet.config";  
-				
+				//path = "commandSet.config";
 				//Create our input as a buffered reader aimed at our path
 			    BufferedReader in = new BufferedReader(new FileReader(path));
 			    String str;

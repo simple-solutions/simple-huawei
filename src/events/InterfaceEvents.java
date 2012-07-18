@@ -11,10 +11,7 @@
  */
 package events;
 
-import java.io.File;
-
-import models.Command;
-import models.Phone;
+import models.*;
 import operations.Application;
 import operations.SerialInterface;
 import views.Window;
@@ -48,9 +45,7 @@ public class InterfaceEvents {
 	}
 	
 	public static void sendTcpMessage (String protocol, String address, String port, String message) {
-		//Get cwd
-        String currentDir = new File(".").getAbsolutePath();
-      	Window.writeToMonitor("Current directory: " + currentDir);
+		(new TcpClient(0)).configure("217.36.122.232", 1721);
       	
 	}
 	

@@ -17,6 +17,8 @@ import events.InterfaceEvents;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 
+import operations.Application;
+
 
 public class Window extends JFrame {
 	
@@ -139,6 +141,10 @@ public class Window extends JFrame {
 		pnlButtonsContainer.setBounds(49, 44, 151, 148);
 		pnlPhoneKeypad.add(pnlButtonsContainer);
 		pnlButtonsContainer.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
+		if(Application.OS_NAME.indexOf("Windows") != -1) {
+			
+		}
 		
 		phoneButton1 = new JButton("  1  ");
 		phoneButton1.addMouseListener(new MouseAdapter() {

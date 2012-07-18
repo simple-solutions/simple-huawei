@@ -79,6 +79,10 @@ public class CommandProcessor {
 			System.out.println("Here comes the prompt!");
 			Phone.sendMessage();
 		}
+		
+		if(response.indexOf("^SISW:") != -1) {
+			
+		}
 
 		
 	}
