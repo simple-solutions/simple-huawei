@@ -88,8 +88,18 @@ public class CommandProcessor {
 			Application.write(TCPClient.getAvailableData());
 		}
 
-		if(response.indexOf("^SISR:") != -1) {
+		if(response.indexOf("^SISR:") != -1){
 			
+			Pattern p = Pattern.compile(".*\\^SISR:\\s+\"([0-9]*)\".*");
+			Matcher m = p.matcher(response);
+			boolean matchFound = m.find();
+			
+			if(matchFound) {
+				String serviceNumber = m.group(1);
+				//Request a read of 1024 bytes.
+				Application.write("AT^SISR="+ serviceNumber +",1024");
+			}
+	
 		}
 		
 	}

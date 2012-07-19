@@ -56,17 +56,18 @@ public class TCPClient extends InternetService {
 	}
 	
 	public static void send(String data) {
-		// TODO Auto-generated method stub
+		
 		Application.write("at^sisw="+ serviceNumber +"," + data.length());
 		sendData.add(data);
 		//Now we have to wait for the line ^SISW: 0,10,0
 		//in the command processor.
 		//
-		//When we receive it, we can remove one item from
-		//the waiting data buffer and write it to the device.
+
 	}
 	
 	public static String getAvailableData () {
+		//When we receive ^SISW: we can remove one item from
+		//the waiting data buffer pass it to the command processor.
 		return sendData.remove(0);
 	}
 	

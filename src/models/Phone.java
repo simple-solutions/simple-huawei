@@ -55,6 +55,12 @@ public class Phone {
 	public static void sendMessage() {
 		Application.write(message);
 		//Then terminate with ^Z
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Application.write(Keys.CTRL_Z);
 		Application.busy = false;
 	}

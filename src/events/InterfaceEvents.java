@@ -44,11 +44,17 @@ public class InterfaceEvents {
 		SerialInterface.close();
 	}
 	
-	public static void sendTcpMessage (String protocol, String address, String port, String message) {
+	public static void sendTcpMessage (String protocol, String address, 
+			String port, String message) {
+		
 		TCPClient.configure(0, "217.36.122.232", 1721);
       	
 	}
 	
+	public static void toggleTCPClient () {}
+	public static void toggleTCPServer () {}
+	public static void toggleUDPClient () {}
+	public static void toggleUDPServer () {}
 	
 	//Get the description and the templated version of the command
 	//and show it in the interface.

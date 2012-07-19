@@ -370,12 +370,12 @@ public class Window extends JFrame {
 		
 		cmbProtocol = new JComboBox();
 		cmbProtocol.setModel(new DefaultComboBoxModel(new String[] {"TCP", "UDP"}));
-		cmbProtocol.setBounds(87, 12, 145, 28);
+		cmbProtocol.setBounds(87, 39, 145, 28);
 		tcpTab.add(cmbProtocol);
 		
 		JLabel lblProtocol = new JLabel("Protocol: ");
 		lblProtocol.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblProtocol.setBounds(12, 17, 75, 18);
+		lblProtocol.setBounds(12, 44, 75, 18);
 		tcpTab.add(lblProtocol);
 		
 		JScrollPane scrollPane_3 = new JScrollPane();
@@ -383,7 +383,7 @@ public class Window extends JFrame {
 						EtchedBorder.LOWERED, null, null));
 		scrollPane_3.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPane_3.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane_3.setBounds(12, 107, 220, 164);
+		scrollPane_3.setBounds(12, 134, 220, 164);
 		tcpTab.add(scrollPane_3);
 		
 		txtTcpMessage = new JTextArea();
@@ -393,22 +393,22 @@ public class Window extends JFrame {
 		
 		JLabel lblAddress = new JLabel("Address:");
 		lblAddress.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblAddress.setBounds(12, 47, 70, 18);
+		lblAddress.setBounds(12, 74, 70, 18);
 		tcpTab.add(lblAddress);
 		
 		JLabel lblPort = new JLabel("Port: ");
 		lblPort.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblPort.setBounds(12, 77, 70, 18);
+		lblPort.setBounds(12, 104, 70, 18);
 		tcpTab.add(lblPort);
 		
 		txtTcpAddress = new JTextField();
-		txtTcpAddress.setBounds(87, 42, 145, 28);
+		txtTcpAddress.setBounds(87, 69, 145, 28);
 		tcpTab.add(txtTcpAddress);
 		txtTcpAddress.setColumns(10);
 		
 		txtTcpPort = new JTextField();
 		txtTcpPort.setColumns(10);
-		txtTcpPort.setBounds(87, 72, 145, 28);
+		txtTcpPort.setBounds(87, 99, 145, 28);
 		tcpTab.add(txtTcpPort);
 		
 		JButton btnTcpSend = new JButton("Send");
@@ -423,8 +423,28 @@ public class Window extends JFrame {
 			}
 		});
 		btnTcpSend.setIcon(new ImageIcon(Window.class.getResource("/javax/swing/plaf/metal/icons/ocean/upFolder.gif")));
-		btnTcpSend.setBounds(75, 290, 96, 30);
+		btnTcpSend.setBounds(75, 300, 96, 30);
 		tcpTab.add(btnTcpSend);
+		
+		JToggleButton tglClient = new JToggleButton("TCP Client");
+		tglClient.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+			}
+		});
+		tglClient.setBounds(12, 2, 96, 30);
+		tcpTab.add(tglClient);
+		
+		JToggleButton tglServer = new JToggleButton("TCP Server");
+		tglClient.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+			}
+		});
+		tglServer.setBounds(120, 2, 112, 30);
+		tcpTab.add(tglServer);
 		
 		pnlOptions = new JPanel();
 		pnlWrapper.add(pnlOptions);

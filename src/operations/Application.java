@@ -100,6 +100,8 @@ public class Application {
 		SerialInterface.write("AT+CLIP=1");
 		//Send an escape key to stop current mode.
 		SerialInterface.write(Keys.ESC);
+		//Turn off PDU mode
+		SerialInterface.write("AT+CMGF=1");
 	}
         
 }
