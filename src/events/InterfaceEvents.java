@@ -45,7 +45,7 @@ public class InterfaceEvents {
 	}
 	
 	public static void sendTcpMessage (String protocol, String address, String port, String message) {
-		(new TcpClient(0)).configure("217.36.122.232", 1721);
+		TCPClient.configure(0, "217.36.122.232", 1721);
       	
 	}
 	

@@ -17,11 +17,11 @@ import operations.Application;
  * @author simple-developer
  *
  */
-public class TcpServer {
-	private static int port;
-	private static int service;
+public class TCPServer extends InternetService {
 	
-	public static void config (int service, int prt) {
+	private static int port;
+	
+	public static void config (int prt) {
 		port = prt;
 		
 		Application.write("AT^SICS=1,CONTYPE,GPRS0");
@@ -29,7 +29,8 @@ public class TcpServer {
 
 		Application.write("AT^SISS=1,SRVTYPE,SOCKET");
 		Application.write("AT^SISS=1,CONID,0");
-		Application.write("AT^SISS=1,ADDRESS,\"SOCKTCP://listener:"+ port +"\"");
+		Application.write("AT^SISS=1,ADDRESS,\"SOCKTCP://listener:"+ port +
+				"\"");
 		
 		Application.write("AT^SISO=1");
 
