@@ -44,17 +44,36 @@ public class InterfaceEvents {
 		SerialInterface.close();
 	}
 	
-	public static void sendTcpMessage (String protocol, String address, 
-			String port, String message) {
+	public static void sendTcpMessage (String message) {
 		
-		TCPClient.configure(0, "217.36.122.232", 1721);
+		TCPClient.send(message);
       	
 	}
 	
-	public static void toggleTCPClient () {}
-	public static void toggleTCPServer () {}
-	public static void toggleUDPClient () {}
-	public static void toggleUDPServer () {}
+	public static void toggleTCPClient (int serviceNumber, String address, 
+			int port) {
+		
+		if(TCPClient.isStarted()) {
+			TCPClient.stop();
+		} else {
+			if(!TCPClient.isConfigured()) {
+				TCPClient.configure(serviceNumber, address, port);
+			}
+			TCPClient.start();
+		}
+	}
+	
+	public static void toggleTCPServer () {
+		
+	}
+	
+	public static void toggleUDPClient () {
+		
+	}
+	
+	public static void toggleUDPServer () {
+		
+	}
 	
 	//Get the description and the templated version of the command
 	//and show it in the interface.

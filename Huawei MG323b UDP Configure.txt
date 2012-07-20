@@ -1,0 +1,19 @@
+at^siss=0,srvtype,socket
+at^sics=0,contype,GPRS0
+at^sics=0,apn,"stream.co.uk"
+at^sics=0,user,"streamip"
+at^sics=0,passwd,"streamip"
+at^siss=0,srvtype,socket
+at^siss=0,conid,0
+at^siss=0,address,"sockudp://217.36.122.232:60006"
+at^siso=0
+
+at^siss=0,srvtype,socket;^sics=0,contype,GPRS0;^sics=0,apn,"stream.co.uk";^sics=0,user,"streamip";^sics=0,passwd,"streamip";^siss=0,srvtype,socket;^siss=0,conid,0;^siss=0,address,"sockudp://217.36.122.232:60006"
+at^siso=0
+
+at^sisw=0,10 -> [data to be sent 10 characters]
+at^sisr=0,[characters to be read]
+
+atd07976400293
+at+cmgs=
+at+cmgf=1

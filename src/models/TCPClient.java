@@ -21,8 +21,9 @@ public class TCPClient extends InternetService {
 	private static String address;
 	private static int port;
 	private static ArrayList<String> sendData = new ArrayList<String>();
+	private static boolean configured = false;
+	private static boolean started = false;
 	
-
 	public static void configure (int serviceNo, String addr, int prt) {
 		
 		//Configure service number, port and address for this client.
@@ -31,27 +32,15 @@ public class TCPClient extends InternetService {
 		port = prt;
 
 		//Connection type: GPRS
-		Application.write("at^sics="+ serviceNumber +",contype,GPRS0");
-		//Set the access point name
-		Application.write("at^sics="+ serviceNumber +",apn,\"stream.co.uk\"");
-		//Set the username
-		Application.write("at^sics="+ serviceNumber +",user,\"streamip\"");
-		//Set the password
-		Application.write("at^sics="+ serviceNumber +",passwd,\"streamip\"");
-		
-		//Information about services
-		Application.write("at^sics?");
-		
-		//Start the socket
-		Application.write("at^siss="+ serviceNumber +",srvtype,socket");
-		//TODO What is this line?
-		Application.write("at^siss="+ serviceNumber +",conid,0");
-		//Point the client towards an address and port
-		Application.write("at^siss="+ serviceNumber +",address,\"sockudp://"+ 
+		Application.write("at^siss="+ serviceNumber +",srvtype,socket;"+
+				"^sics="+ serviceNumber +",contype,GPRS0;"+
+				"^sics="+ serviceNumber +",apn,\"stream.co.uk\";"+
+				"^sics="+ serviceNumber +",user,\"streamip\";"+
+				"^sics="+ serviceNumber +",passwd,\"streamip\";"+
+				"^siss="+ serviceNumber +",srvtype,socket;"+
+				"^siss="+ serviceNumber +",conid,0;"+
+				"^siss="+ serviceNumber +",address,\"sockudp://"+ 
 				address +":"+ port +"\"");
-		
-		//TODO Information about WHAT?
-		Application.write("at^siss?");
 
 	}
 	
@@ -70,6 +59,53 @@ public class TCPClient extends InternetService {
 		//the waiting data buffer pass it to the command processor.
 		return sendData.remove(0);
 	}
-	
 
+	/* Getters and Setters */
+	public static int getServiceNumber() {
+		return serviceNumber;
+	}
+
+	public static void setServiceNumber(int serviceNumber) {
+		TCPClient.serviceNumber = serviceNumber;
+	}
+
+	public static String getAddress() {
+		return address;
+	}
+
+	public static void setAddress(String address) {
+		TCPClient.address = address;
+	}
+
+	public static int getPort() {
+		return port;
+	}
+
+	public static void setPort(int port) {
+		TCPClient.port = port;
+	}
+
+	public static ArrayList<String> getSendData() {
+		return sendData;
+	}
+
+	public static void setSendData(ArrayList<String> sendData) {
+		TCPClient.sendData = sendData;
+	}
+
+	public static boolean isConfigured() {
+		return configured;
+	}
+
+	public static void setConfigured(boolean configured) {
+		TCPClient.configured = configured;
+	}
+	
+	public static boolean isStarted() {
+		return started;
+	}
+
+	public static void setStarted(boolean started) {
+		TCPClient.started = started;
+	}
 }

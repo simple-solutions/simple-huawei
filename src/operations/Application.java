@@ -96,6 +96,8 @@ public class Application {
 	}
 	
 	public static void deviceConfig () {
+		//Return to factory
+		SerialInterface.write("AT&F");
 		//Turn on incoming call information
 		SerialInterface.write("AT+CLIP=1");
 		//Send an escape key to stop current mode.
