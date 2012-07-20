@@ -17,7 +17,10 @@ import events.InterfaceEvents;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent; 
 
+import models.TCPClient;
+
 import operations.Application;
+import operations.SerialInterface;
 
 
 public class Window extends JFrame {
@@ -710,7 +713,8 @@ public class Window extends JFrame {
 		        	//Only try to disconnect if the app is
 		        	//currently connected.
 		        	if(!tglConnect.isEnabled()) {
-		        		
+		        		SerialInterface.close();
+		        		TCPClient.stop();
 		        	}
 				} catch (Exception e) {
 					e.printStackTrace();
