@@ -1,8 +1,15 @@
 ## Ignore temporary & eclipse .project files
 *~
+
 *.project
 .project
-*.classpath
-.classpath
-*/bin/*
+
+#java specific
 *.class
+
+## generic files to ignore
+*~
+*.lock
+*.DS_Store
+*.swp
+*.out
