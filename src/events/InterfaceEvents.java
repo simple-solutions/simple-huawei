@@ -83,7 +83,7 @@ public class InterfaceEvents {
 		Window.setCommandPreview(command.template(templateString));
 	}
 	
-	public static void sendCommand (int index) {
-		Application.write(Application.commands[index].getMessage());
+	public static void sendCommand (int index, String command) {
+		Application.write(command);
 	}
 }

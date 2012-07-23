@@ -468,7 +468,19 @@ public class Window extends JFrame {
 		cmdTab.setLayout(null);
 		
 		
-		
+		cmdList = new DefaultListModel();
+		lstCommands = new JList(cmdList);
+		lstCommands.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		lstCommands.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent arg0) {
+				commandIndex = arg0.getFirstIndex();
+				System.out.println(commandIndex);
+				InterfaceEvents.getCommandPreview(commandIndex, 
+						txtCommandVariables.getText());
+				
+			}
+		});
+		lstCommands.setBounds(12, 6, 221, 172);
 
 		JScrollPane scrollPane_2 = new JScrollPane(lstCommands);
 		scrollPane_2.setBounds(12, 6, 221, 82);
@@ -483,10 +495,11 @@ public class Window extends JFrame {
 		cmdTab.add(lblCmdDesc);
 		
 		btnNewButton = new JButton("Send Command");
+
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				InterfaceEvents.sendCommand(commandIndex);
+				InterfaceEvents.sendCommand(commandIndex, lblCommandPreview.getText());
 			}
 		});
 		
@@ -684,20 +697,6 @@ public class Window extends JFrame {
 		for (int a = 0; a < com.length; a++) {
 		     com[a].setEnabled(false);
 		}
-		
-		cmdList = new DefaultListModel();
-		lstCommands = new JList(cmdList);
-		lstCommands.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		lstCommands.addListSelectionListener(new ListSelectionListener() {
-			public void valueChanged(ListSelectionEvent arg0) {
-				commandIndex = arg0.getFirstIndex();
-				System.out.println(commandIndex);
-				InterfaceEvents.getCommandPreview(commandIndex, 
-						txtCommandVariables.getText());
-				
-			}
-		});
-		lstCommands.setBounds(12, 6, 221, 172);
 		
 		
 		/********************************************

@@ -85,6 +85,12 @@ public class CommandProcessor {
 		//the TCP client and write it to the device, it should be expecting
 		//data of the length we are about to provide.
 		if(response.indexOf("^SISW:") != -1) {
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+
+				e.printStackTrace();
+			}
 			Application.write(TCPClient.getAvailableData());
 		}
 

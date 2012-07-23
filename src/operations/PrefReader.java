@@ -9,7 +9,6 @@ import views.Window;
 
 
 public class PrefReader {
-		private static String[] preferences;
 		
 		/**
 		 * PREFERENCE SETTINGS
@@ -19,9 +18,8 @@ public class PrefReader {
 		 * TCP address
 		 */
 		
-		
 		public static String[] read () {
-			preferences = new String[4];
+			String [] preferences = new String[4];
 			//Catch read exceptions
 			try {
 				
@@ -34,6 +32,7 @@ public class PrefReader {
 			    //While there are lines in the buffer, add them to our readData string.
 			    while ((str = in.readLine()) != null) {
 			    	preferences[count] = str;
+			    	System.out.println(str);
 			    }
 			    //Close the stream
 			    in.close();

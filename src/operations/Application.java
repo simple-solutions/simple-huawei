@@ -104,6 +104,9 @@ public class Application {
 		SerialInterface.write(Keys.ESC);
 		//Turn off PDU mode
 		SerialInterface.write("AT+CMGF=1");
+		for(int i = 0; i <= 9; i++) {
+			SerialInterface.write("AT^CISC=" + i);
+		}
 	}
         
 }
