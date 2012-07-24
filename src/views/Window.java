@@ -430,14 +430,16 @@ public class Window extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				String address =  txtTcpAddress.getText();
+				String portStr = txtTcpPort.getText();
+				System.out.println("THIS PORT (str): " + portStr);
 				int port = 0;
 				try {
-					Integer.parseInt(txtTcpPort.getText());
+					port = Integer.parseInt(txtTcpPort.getText());
 				} catch (Exception e1) {
 					System.out.println(e1.getMessage());
 				}
-				
-				InterfaceEvents.toggleTCPClient(0,address, port);
+				System.out.println("THIS PORT: " + portStr);
+				InterfaceEvents.toggleTCPHandler(address, port);
 			}
 		});
 		tglClient.setBounds(12, 102, 96, 30);
@@ -499,7 +501,7 @@ public class Window extends JFrame {
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				InterfaceEvents.sendCommand(commandIndex, lblCommandPreview.getText());
+				InterfaceEvents.sendCommand(commandIndex, Application.commands[commandIndex].template(txtCommandVariables.getText()));
 			}
 		});
 		

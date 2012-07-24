@@ -30,35 +30,46 @@ public class TCPClient extends InternetService {
 		serviceNumber = serviceNo;
 		address = addr;
 		port = prt;
-
-		//Connection type: GPRS
-		Application.write("at^siss="+ serviceNumber +",srvtype,socket;"+
+		
+		/*Application.write("at^siss="+ serviceNumber +",srvtype,socket;"+
 				"^sics="+ serviceNumber +",contype,GPRS0;"+
 				"^sics="+ serviceNumber +",apn,\"stream.co.uk\";"+
 				"^sics="+ serviceNumber +",user,\"streamip\";"+
 				"^sics="+ serviceNumber +",passwd,\"streamip\";"+
 				"^siss="+ serviceNumber +",srvtype,socket;"+
 				"^siss="+ serviceNumber +",conid,0;"+
-				"^siss="+ serviceNumber +",address,\"sockudp://"+ 
+				"^siss="+ serviceNumber +",address,\"SOCKTCP://"+ 
+				address +":"+ port +"\"");*/
+		
+		Application.write("AT^SICS="+ serviceNumber +",CONTYPE,GPRS0;^SICS="+ 
+				serviceNumber +",APN,internetvpn");
+		
+		Application.write("AT^SISS="+ serviceNumber +",SRVTYPE,SOCKET;^SISS="+ 
+				serviceNumber +",CONID,0;^SISS="+
+				serviceNumber +",ADDRESS,\"SOCKTCP://"+ 
 				address +":"+ port +"\"");
-
+		
+		configured = true;
 	}
 	
-	public static void send(String data) {
-		
+	public static void prepare(String data) {
 		Application.write("at^sisw="+ serviceNumber +"," + data.length());
 		sendData.add(data);
 		//Now we have to wait for the line ^SISW: 0,10,0
 		//in the command processor.
-		//
 
 	}
 	
-	public static String getAvailableData () {
+	public static void send () {
 		//When we receive ^SISW: we can remove one item from
 		//the waiting data buffer pass it to the command processor.
-		return sendData.remove(0);
+		System.out.println("Turning on TCP sending.");
+		//We need to start TCP sending to remove \r
+		Application.tcpSending = true;
+		Application.write(sendData.remove(0));
+		
 	}
+
 
 	/* Getters and Setters */
 	public static int getServiceNumber() {

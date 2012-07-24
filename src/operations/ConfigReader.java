@@ -40,7 +40,6 @@ public class ConfigReader {
 			    while ((str = in.readLine()) != null) {
 			    	if(str.matches("^[^#\\s].*")) {
 			    		commands.add(str);
-			    		System.out.println(str);
 			    	}
 			    }
 			    //Close the stream

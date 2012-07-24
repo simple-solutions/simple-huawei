@@ -20,22 +20,17 @@ import operations.Application;
 public class TCPServer extends InternetService {
 	
 	private static int port;
+	private static boolean configured = false;
 	
-	public static void config (int prt) {
+	public static void configure (int serviceNo, int prt) {
+		
 		port = prt;
-		
-		Application.write("AT^SICS=1,CONTYPE,GPRS0");
-		Application.write("AT^SICS=,APN,internetvpn");
-
-		Application.write("AT^SISS=1,SRVTYPE,SOCKET");
-		Application.write("AT^SISS=1,CONID,0");
-		Application.write("AT^SISS=1,ADDRESS,\"SOCKTCP://listener:"+ port +
-				"\"");
-		
-		Application.write("AT^SISO=1");
-
-		Application.write("AT&W");
-		
-		
+		serviceNumber = serviceNo;
+		Application.write("AT^SISS="+ serviceNumber +",SRVTYPE,SOCKET;^SISS="+ serviceNumber +",CONID,0;^SISS="+ serviceNumber +",ADDRESS,\"SOCKTCP://listener:"+ port +"\"");
+		configured = true;
+	}
+	
+	public static boolean isConfigured () {
+		return configured;
 	}
 }

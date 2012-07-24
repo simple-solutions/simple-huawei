@@ -26,13 +26,16 @@ public class Application {
 	public static boolean connected;
 	public static boolean logging;
 	public static boolean busy;
+	public static boolean tcpSending;
 	public static Command[] commands;
 	public static CallDialog callDialog = new CallDialog();
 	public static String OS_NAME = System.getProperty("os.name");
 	public static Window window = new Window();
+
 	
 	
 	public static void main (String[] args) {
+		tcpSending = false;
 		window.setVisible(true);
 		//Lists the current command set and the available devices in window.
 		listDevices();
@@ -104,9 +107,6 @@ public class Application {
 		SerialInterface.write(Keys.ESC);
 		//Turn off PDU mode
 		SerialInterface.write("AT+CMGF=1");
-		for(int i = 0; i <= 9; i++) {
-			SerialInterface.write("AT^CISC=" + i);
-		}
 	}
         
 }

@@ -46,20 +46,20 @@ public class InterfaceEvents {
 	
 	public static void sendTcpMessage (String message) {
 		
-		TCPClient.send(message);
+		TCPClient.prepare(message);
       	
 	}
 	
-	public static void toggleTCPClient (int serviceNumber, String address, 
+	public static void toggleTCPHandler (String address, 
 			int port) {
 		
-		if(TCPClient.isStarted()) {
-			TCPClient.stop();
+		if(TCPHandler.isStarted()) {
+			TCPHandler.stop();
 		} else {
-			if(!TCPClient.isConfigured()) {
-				TCPClient.configure(serviceNumber, address, port);
+			if(!TCPHandler.isConfigured()) {
+				TCPHandler.configure(address, port);
 			}
-			TCPClient.start();
+			TCPHandler.start();
 		}
 	}
 	

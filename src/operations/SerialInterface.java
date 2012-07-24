@@ -120,8 +120,13 @@ public class SerialInterface {
 	
 	//Write to the serial port.
 	public static void write (String message) {
-		//Append a carriage return to each command so that it sends.
-		CommandHandler.addCommand(message + "\r");
+		//If we are writing a TCP message to the device then 
+		if(Application.tcpSending == false) {
+			message += '\r';
+		}else {
+			Application.tcpSending = false;
+		}
+		CommandHandler.addCommand(message);
 	}
 	
 	public static void write (char ch) {
