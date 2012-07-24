@@ -13,41 +13,49 @@ package models;
 
 
 public class TCPHandler {
-
+	
+	private static TCPClient client;
+	private static TCPServer server;
+	
 	public static void configure (String address, int port) {
 		System.out.println("PORT: " + port);
-		TCPClient.configure(0, address, port);
-		TCPServer.configure(1, port);
+		client.configure(0, address, port);
+		server.configure(1, port);
 	}
 	
 	public static boolean isConfigured () {
-		return TCPClient.isConfigured() && TCPServer.isConfigured();
+		return client.isConfigured() && server.isConfigured();
 	}
 	
 	public static boolean isStarted () {
-		return TCPClient.isStarted() && TCPServer.isStarted();
+		System.out.println(client.isStarted() + ":" + server.isStarted());
+		return client.isStarted() && server.isStarted();
 	}
 	
 	public static void start () {
 		if(isConfigured()) {
 			System.out.println("Starting client");
-			TCPClient.start();
+			client.start();
 			System.out.println("Starting server");
-			TCPServer.start();
+			server.start();
 		} else {
 			System.out.println("Not configured.");
 		}
 	}
 	
 	public static void stop () {
-		TCPClient.stop();
-		TCPServer.stop();
+		client.stop();
+		server.stop();
 	}
 	
 	public static void write (String data) {
 		if(isStarted()) {
-			TCPClient.prepare(data);
+			client.prepare(data);
 		}
+	}
+	
+	public static void confirmClientWrite () {
+		client.send();
 	}
 	
 }

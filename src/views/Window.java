@@ -17,7 +17,7 @@ import events.InterfaceEvents;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent; 
 
-import models.TCPClient;
+import models.TCPHandler;
 
 import operations.Application;
 import operations.SerialInterface;
@@ -715,7 +715,7 @@ public class Window extends JFrame {
 		        	//currently connected.
 		        	if(!tglConnect.isEnabled()) {
 		        		SerialInterface.close();
-		        		TCPClient.stop();
+		        		TCPHandler.stop();
 		        	}
 				} catch (Exception e) {
 					e.printStackTrace();

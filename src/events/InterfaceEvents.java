@@ -46,7 +46,7 @@ public class InterfaceEvents {
 	
 	public static void sendTcpMessage (String message) {
 		
-		TCPClient.prepare(message);
+		TCPHandler.write(message);
       	
 	}
 	

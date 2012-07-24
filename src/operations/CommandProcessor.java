@@ -15,7 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import models.Phone;
-import models.TCPClient;
+import models.TCPHandler;
 
 import views.CallDialog;
 import views.Window;
@@ -89,7 +89,8 @@ public class CommandProcessor {
 		//the TCP client and write it to the device, it should be expecting
 		//data of the length we are about to provide.
 		if(response.indexOf("^SISW:") != -1) {
-			TCPClient.send();
+			//
+			TCPHandler.confirmClientWrite();
 		}
 
 		if(response.indexOf("^SISR:") != -1){

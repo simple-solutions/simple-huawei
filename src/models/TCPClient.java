@@ -1,6 +1,6 @@
 /**
  ******************************************************************************
- *                                TCPClient.java                              *
+ *                                this.java                              *
  ****************************************************************************** 
  * (Overview)
  * 
@@ -17,19 +17,19 @@ import operations.Application;
 
 public class TCPClient extends InternetService {
 	
-	private static int serviceNumber;
-	private static String address;
-	private static int port;
-	private static ArrayList<String> sendData = new ArrayList<String>();
-	private static boolean configured = false;
-	private static boolean started = false;
+	private int serviceNumber;
+	private String address;
+	private int port;
+	private ArrayList<String> sendData = new ArrayList<String>();
+	private boolean configured = false;
+	private boolean started = false;
 	
-	public static void configure (int serviceNo, String addr, int prt) {
+	public void configure (int serviceNo, String addr, int prt) {
 		
 		//Configure service number, port and address for this client.
-		serviceNumber = serviceNo;
-		address = addr;
-		port = prt;
+		this.serviceNumber = serviceNo;
+		this.address = addr;
+		this.port = prt;
 		
 		/*Application.write("at^siss="+ serviceNumber +",srvtype,socket;"+
 				"^sics="+ serviceNumber +",contype,GPRS0;"+
@@ -41,82 +41,82 @@ public class TCPClient extends InternetService {
 				"^siss="+ serviceNumber +",address,\"SOCKTCP://"+ 
 				address +":"+ port +"\"");*/
 		
-		Application.write("AT^SICS="+ serviceNumber +",CONTYPE,GPRS0;^SICS="+ 
-				serviceNumber +",APN,internetvpn");
+		Application.write("AT^SICS="+ this.serviceNumber +",CONTYPE,GPRS0;^SICS="+ 
+				this.serviceNumber +",APN,internetvpn");
 		
-		Application.write("AT^SISS="+ serviceNumber +",SRVTYPE,SOCKET;^SISS="+ 
-				serviceNumber +",CONID,0;^SISS="+
-				serviceNumber +",ADDRESS,\"SOCKTCP://"+ 
-				address +":"+ port +"\"");
+		Application.write("AT^SISS="+ this.serviceNumber +",SRVTYPE,SOCKET;^SISS="+ 
+				this.serviceNumber +",CONID,0;^SISS="+
+				this.serviceNumber +",ADDRESS,\"SOCKTCP://"+ 
+				this.address +":"+ this.port +"\"");
 		
-		configured = true;
+		this.configured = true;
 	}
 	
-	public static void prepare(String data) {
+	public void prepare(String data) {
 		Application.write("at^sisw="+ serviceNumber +"," + data.length());
-		sendData.add(data);
+		this.sendData.add(data);
 		//Now we have to wait for the line ^SISW: 0,10,0
 		//in the command processor.
 
 	}
 	
-	public static void send () {
+	public void send () {
 		//When we receive ^SISW: we can remove one item from
 		//the waiting data buffer pass it to the command processor.
 		System.out.println("Turning on TCP sending.");
 		//We need to start TCP sending to remove \r
 		Application.tcpSending = true;
-		Application.write(sendData.remove(0));
+		Application.write(this.sendData.remove(0));
 		
 	}
 
 
 	/* Getters and Setters */
-	public static int getServiceNumber() {
-		return serviceNumber;
+	public int getServiceNumber() {
+		return this.serviceNumber;
 	}
 
-	public static void setServiceNumber(int serviceNumber) {
-		TCPClient.serviceNumber = serviceNumber;
+	public void setServiceNumber(int serviceNumber) {
+		this.serviceNumber = serviceNumber;
 	}
 
-	public static String getAddress() {
-		return address;
+	public String getAddress() {
+		return this.address;
 	}
 
-	public static void setAddress(String address) {
-		TCPClient.address = address;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
-	public static int getPort() {
-		return port;
+	public int getPort() {
+		return this.port;
 	}
 
-	public static void setPort(int port) {
-		TCPClient.port = port;
+	public void setPort(int port) {
+		this.port = port;
 	}
 
-	public static ArrayList<String> getSendData() {
-		return sendData;
+	public ArrayList<String> getSendData() {
+		return this.sendData;
 	}
 
-	public static void setSendData(ArrayList<String> sendData) {
-		TCPClient.sendData = sendData;
+	public void setSendData(ArrayList<String> sendData) {
+		this.sendData = sendData;
 	}
 
-	public static boolean isConfigured() {
-		return configured;
+	public boolean isConfigured() {
+		return this.configured;
 	}
 
-	public static void setConfigured(boolean configured) {
-		TCPClient.configured = configured;
+	public void setConfigured(boolean configured) {
+		this.configured = configured;
 	}
 	
-	public static boolean isStarted() {
-		return started;
+	public boolean isStarted() {
+		return this.started;
 	}
 
-	public static void setStarted(boolean started) {
-		TCPClient.started = started;
+	public void setStarted(boolean started) {
+		this.started = started;
 	}
 }

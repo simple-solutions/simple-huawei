@@ -19,23 +19,23 @@ import operations.Application;
  */
 public abstract class InternetService {
 	
-	protected static int serviceNumber;
-	protected static boolean started;
+	protected int serviceNumber;
+	protected boolean started;
 	
-	public static void start () {
+	public void start () {
 		//Starts the service.
-		Application.write("at^siso=" + serviceNumber);
-		System.out.println("Service " + serviceNumber + " is started.");
+		Application.write("at^siso=" + this.serviceNumber);
+		System.out.println("Service " + this.serviceNumber + " is started.");
 		started = true;
 	}
 	
-	public static void stop () {
-		Application.write("AT^SISC=" + serviceNumber);
-		System.out.println("Service " + serviceNumber + " is stopped.");
+	public void stop () {
+		Application.write("AT^SISC=" + this.serviceNumber);
+		System.out.println("Service " + this.serviceNumber + " is stopped.");
 		started = false;
 	}
 	
-	public static boolean isStarted () {
+	public boolean isStarted () {
 		return started;
 	}
 	

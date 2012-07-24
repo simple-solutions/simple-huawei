@@ -19,18 +19,22 @@ import operations.Application;
  */
 public class TCPServer extends InternetService {
 	
-	private static int port;
-	private static boolean configured = false;
+	private int port;
+	private boolean configured = false;
 	
-	public static void configure (int serviceNo, int prt) {
+	public void configure (int serviceNo, int prt) {
 		
-		port = prt;
-		serviceNumber = serviceNo;
-		Application.write("AT^SISS="+ serviceNumber +",SRVTYPE,SOCKET;^SISS="+ serviceNumber +",CONID,0;^SISS="+ serviceNumber +",ADDRESS,\"SOCKTCP://listener:"+ port +"\"");
-		configured = true;
+		this.port = prt;
+		this.serviceNumber = serviceNo;
+		Application.write("AT^SISS="+ this.serviceNumber +
+				",SRVTYPE,SOCKET;^SISS="+ 
+				this.serviceNumber +",CONID,0;^SISS="+ 
+				this.serviceNumber +",ADDRESS,\"SOCKTCP://listener:"+ 
+				this.port +"\"");
+		this.configured = true;
 	}
 	
-	public static boolean isConfigured () {
-		return configured;
+	public boolean isConfigured () {
+		return this.configured;
 	}
 }
