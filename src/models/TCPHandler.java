@@ -17,7 +17,13 @@ public class TCPHandler {
 	private static TCPClient client;
 	private static TCPServer server;
 	
+	public static void init () {
+		client = new TCPClient();
+		server = new TCPServer();
+	}
+	
 	public static void configure (String address, int port) {
+		
 		System.out.println("PORT: " + port);
 		client.configure(0, address, port);
 		server.configure(1, port);
@@ -28,7 +34,6 @@ public class TCPHandler {
 	}
 	
 	public static boolean isStarted () {
-		System.out.println(client.isStarted() + ":" + server.isStarted());
 		return client.isStarted() && server.isStarted();
 	}
 	
@@ -36,6 +41,11 @@ public class TCPHandler {
 		if(isConfigured()) {
 			System.out.println("Starting client");
 			client.start();
+			try {
+				Thread.sleep(2000);
+			} catch (Exception e) {
+				
+			}
 			System.out.println("Starting server");
 			server.start();
 		} else {

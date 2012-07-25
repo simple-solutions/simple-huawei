@@ -16,7 +16,6 @@ public class Command {
 		String[] values = valuesStr.split(",");
 		String command;
 		int c = 0;
-		System.out.println("Templating " + this.message + " with " + valuesStr);
 		command = this.message;
 		while(this.message.indexOf("@") != -1 && c < values.length) {
 			//Replace the index character

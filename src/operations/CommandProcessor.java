@@ -30,7 +30,6 @@ public class CommandProcessor {
 		
 		//If we are dealing with a COPS response
 		if(response.indexOf("+COPS") != -1) {
-			System.out.println("COPS present in response");
 			//Extract the operator name with regex.
 			Pattern p = Pattern.compile(".*\\+COPS:.*\"(.+)\"");
 			Matcher m = p.matcher(response);
@@ -69,7 +68,6 @@ public class CommandProcessor {
 			Pattern p = Pattern.compile(".*\\+CLIP:\\s+\"([0-9]*)\".*");
 			Matcher m = p.matcher(response);
 			boolean matchFound = m.find();
-			System.out.println(matchFound);
 			if(matchFound) {
 				String number = m.group(1);
 				//Fire up the call dialog and show the incoming number.
@@ -81,7 +79,6 @@ public class CommandProcessor {
 		//If the device is prompting for SMS sending, then send the message
 		//currently stored in the phone.
 		if(response.indexOf(">") != -1) {
-			System.out.println("Here comes the prompt!");
 			Phone.sendMessage();
 		}
 		

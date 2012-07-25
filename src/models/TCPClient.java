@@ -22,7 +22,6 @@ public class TCPClient extends InternetService {
 	private int port;
 	private ArrayList<String> sendData = new ArrayList<String>();
 	private boolean configured = false;
-	private boolean started = false;
 	
 	public void configure (int serviceNo, String addr, int prt) {
 		
@@ -42,7 +41,11 @@ public class TCPClient extends InternetService {
 				address +":"+ port +"\"");*/
 		
 		Application.write("AT^SICS="+ this.serviceNumber +",CONTYPE,GPRS0;^SICS="+ 
-				this.serviceNumber +",APN,internetvpn");
+				this.serviceNumber +
+				",apn,\"stream.co.uk\";"+
+				"^sics="+ serviceNumber +",user,\"streamip\";"+
+				"^sics="+ serviceNumber +",passwd,\"streamip\";"+
+				"^siss="+ serviceNumber +",srvtype,socket;");
 		
 		Application.write("AT^SISS="+ this.serviceNumber +",SRVTYPE,SOCKET;^SISS="+ 
 				this.serviceNumber +",CONID,0;^SISS="+
@@ -112,11 +115,4 @@ public class TCPClient extends InternetService {
 		this.configured = configured;
 	}
 	
-	public boolean isStarted() {
-		return this.started;
-	}
-
-	public void setStarted(boolean started) {
-		this.started = started;
-	}
 }

@@ -36,7 +36,9 @@ public abstract class InternetService {
 	}
 	
 	public boolean isStarted () {
-		return started;
+		System.out.println("Service " + this.serviceNumber + " is started: " + started);
+		return false;
+		//return started;
 	}
 	
 }
