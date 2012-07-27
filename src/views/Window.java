@@ -14,20 +14,18 @@ import java.net.URISyntaxException;
 
 import events.InterfaceEvents;
 
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.ListSelectionEvent; 
-
 import models.TCPHandler;
 
 import operations.Application;
 import operations.SerialInterface;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 
 public class Window extends JFrame {
 	
 	private static final long serialVersionUID = 1L;
 	private static boolean logging;
-	private static DefaultListModel cmdList;
 	private int commandIndex = 0;
 	
 	private static JPanel contentPane;
@@ -57,6 +55,7 @@ public class Window extends JFrame {
 	private static JButton btnEnd;
 	private static JButton btnSendSms;
 	private static JButton btnNewButton;
+	private static JButton btnTcpSend;
 	private static JLabel lblSignal;
 	private static JLabel lblOperator;
 	private static JLabel lblCallStatus;
@@ -75,7 +74,7 @@ public class Window extends JFrame {
 	private static JScrollPane scrollPane;
 	private static JProgressBar prgSignal;
 	private static JPanel cmdTab;
-	public static JList lstCommands;
+	public static JComboBox lstCommands;
 	private JTextField txtCommandVariables;
 	private JTextField txtSmsNumber;
 	private JComboBox cmbProtocol;
@@ -117,9 +116,6 @@ public class Window extends JFrame {
 		pnlWrapper = new JPanel();
 		pnlWrapper.setLayout(new GridLayout(0, 1, 0, 0));
 		
-		if(Application.OS_NAME.indexOf("Windows") != -1) {
-			
-		}
 		contentPane.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		pnlOptions = new JPanel();
@@ -154,7 +150,17 @@ public class Window extends JFrame {
 		pnlPhoneKeypad.add(pnlButtonsContainer);
 		pnlButtonsContainer.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		phoneButton1 = new JButton("  1  ");
+		
+		boolean windows = (Application.OS_NAME.indexOf("Windows") != -1);
+		//Slight hack on the star, it's to do with the width.
+		String[] buttons = {"1","2","3","4","5","6","7","8","9","0"," *","#"};
+		for(int i = 0; i < buttons.length; i++) {
+			if(!windows) {
+				buttons[i] = "  " + buttons[i] + "  ";
+			}
+		}
+		
+		phoneButton1 = new JButton(buttons[0]);
 		phoneButton1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -163,7 +169,7 @@ public class Window extends JFrame {
 		});
 		pnlButtonsContainer.add(phoneButton1);
 		
-		phoneButton2 = new JButton("  2  ");
+		phoneButton2 = new JButton(buttons[1]);
 		phoneButton2.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -172,7 +178,7 @@ public class Window extends JFrame {
 		});
 		pnlButtonsContainer.add(phoneButton2);
 		
-		phoneButton3 = new JButton("  3  ");
+		phoneButton3 = new JButton(buttons[2]);
 		phoneButton3.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -181,7 +187,7 @@ public class Window extends JFrame {
 		});
 		pnlButtonsContainer.add(phoneButton3);
 		
-		phoneButton4 = new JButton("  4  ");
+		phoneButton4 = new JButton(buttons[3]);
 		phoneButton4.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -191,7 +197,7 @@ public class Window extends JFrame {
 		});
 		pnlButtonsContainer.add(phoneButton4);
 		
-		phoneButton5 = new JButton("  5  ");
+		phoneButton5 = new JButton(buttons[4]);
 		phoneButton5.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -200,7 +206,7 @@ public class Window extends JFrame {
 		});
 		pnlButtonsContainer.add(phoneButton5);
 		
-		phoneButton6 = new JButton("  6  ");
+		phoneButton6 = new JButton(buttons[5]);
 		phoneButton6.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -209,7 +215,7 @@ public class Window extends JFrame {
 		});
 		pnlButtonsContainer.add(phoneButton6);
 		
-		phoneButton7 = new JButton("  7  ");
+		phoneButton7 = new JButton(buttons[6]);
 		phoneButton7.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -218,7 +224,7 @@ public class Window extends JFrame {
 		});
 		pnlButtonsContainer.add(phoneButton7);
 		
-		phoneButton8 = new JButton("  8  ");
+		phoneButton8 = new JButton(buttons[7]);
 		phoneButton8.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -227,7 +233,7 @@ public class Window extends JFrame {
 		});
 		pnlButtonsContainer.add(phoneButton8);
 		
-		phoneButton9 = new JButton("  9  ");
+		phoneButton9 = new JButton(buttons[8]);
 		phoneButton9.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -236,7 +242,7 @@ public class Window extends JFrame {
 		});
 		pnlButtonsContainer.add(phoneButton9);
 		
-		phoneButton0 = new JButton("  0  ");
+		phoneButton0 = new JButton(buttons[9]);
 		phoneButton0.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -244,7 +250,7 @@ public class Window extends JFrame {
 			}
 		});
 		
-		JButton phoneButtonStar = new JButton("   *  ");
+		JButton phoneButtonStar = new JButton(buttons[10]);
 		phoneButtonStar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -254,7 +260,7 @@ public class Window extends JFrame {
 		pnlButtonsContainer.add(phoneButtonStar);
 		pnlButtonsContainer.add(phoneButton0);
 		
-		JButton phoneButtonHash = new JButton("  #  ");
+		JButton phoneButtonHash = new JButton(buttons[11]);
 		phoneButtonHash.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -321,7 +327,8 @@ public class Window extends JFrame {
 		btnSendSms.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				InterfaceEvents.sendSms(txtSmsNumber.getText(),txtAreaSms.getText());
+				InterfaceEvents.sendSms(txtSmsNumber.getText(),
+						txtAreaSms.getText());
 			}
 		});
 		btnSendSms.setIcon(new ImageIcon(Window.class.getResource
@@ -371,7 +378,8 @@ public class Window extends JFrame {
 		tcpTab.setLayout(null);
 		
 		cmbProtocol = new JComboBox();
-		cmbProtocol.setModel(new DefaultComboBoxModel(new String[] {"TCP", "UDP"}));
+		cmbProtocol.setModel(new DefaultComboBoxModel(
+				new String[] {"TCP", "UDP"}));
 		cmbProtocol.setBounds(87, 7, 145, 28);
 		tcpTab.add(cmbProtocol);
 		
@@ -383,8 +391,10 @@ public class Window extends JFrame {
 		JScrollPane scrollPane_3 = new JScrollPane();
 		scrollPane_3.setViewportBorder(new EtchedBorder(
 						EtchedBorder.LOWERED, null, null));
-		scrollPane_3.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollPane_3.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane_3.setVerticalScrollBarPolicy(ScrollPaneConstants.
+				VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane_3.setHorizontalScrollBarPolicy(ScrollPaneConstants.
+				HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane_3.setBounds(12, 134, 220, 70);
 		tcpTab.add(scrollPane_3);
 		
@@ -413,7 +423,8 @@ public class Window extends JFrame {
 		txtTcpPort.setBounds(87, 67, 145, 28);
 		tcpTab.add(txtTcpPort);
 		
-		JButton btnTcpSend = new JButton("Send");
+		btnTcpSend = new JButton("Send");
+		btnTcpSend.setEnabled(false);
 		btnTcpSend.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -421,11 +432,14 @@ public class Window extends JFrame {
 				InterfaceEvents.sendTcpMessage(message);
 			}
 		});
-		btnTcpSend.setIcon(new ImageIcon(Window.class.getResource("/javax/swing/plaf/metal/icons/ocean/upFolder.gif")));
+		btnTcpSend.setIcon(new ImageIcon(Window.class.getResource("/javax/" +
+				"swing/plaf/metal/icons/ocean/upFolder.gif")));
 		btnTcpSend.setBounds(75, 212, 96, 30);
 		tcpTab.add(btnTcpSend);
 		
-		JToggleButton tglClient = new JToggleButton("TCP Client");
+		JToggleButton tglClient = new JToggleButton("Start Server");
+		tglClient.setIcon(new ImageIcon(Window.class.getResource("/com/sun/" +
+				"java/swing/plaf/windows/icons/Computer.gif")));
 		tglClient.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -440,20 +454,17 @@ public class Window extends JFrame {
 				}
 				System.out.println("THIS PORT: " + portStr);
 				InterfaceEvents.toggleTCPHandler(address, port);
+				btnTcpSend.setEnabled(true);
 			}
 		});
-		tglClient.setBounds(12, 102, 96, 30);
+		tglClient.setBounds(12, 102, 220, 30);
 		tcpTab.add(tglClient);
-		
-		JToggleButton tglServer = new JToggleButton("TCP Server");
 		tglClient.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
 			}
 		});
-		tglServer.setBounds(111, 102, 121, 30);
-		tcpTab.add(tglServer);
 		//Disable all children of the initial tab
 		Component[] com = pnlButtonsContainer.getComponents();
 		txtPhoneDisplay.setEnabled(false);
@@ -470,30 +481,10 @@ public class Window extends JFrame {
 		cmdTab.setLayout(null);
 		
 		
-		cmdList = new DefaultListModel();
-		lstCommands = new JList(cmdList);
-		lstCommands.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		lstCommands.addListSelectionListener(new ListSelectionListener() {
-			public void valueChanged(ListSelectionEvent arg0) {
-				commandIndex = arg0.getFirstIndex();
-				System.out.println(commandIndex);
-				InterfaceEvents.getCommandPreview(commandIndex, 
-						txtCommandVariables.getText());
-				
-			}
-		});
-		lstCommands.setBounds(12, 6, 221, 172);
-
-		JScrollPane scrollPane_2 = new JScrollPane(lstCommands);
-		scrollPane_2.setBounds(12, 6, 221, 82);
-		cmdTab.add(scrollPane_2);
-		
-
-		
 		lblCmdDesc = new JLabel("No command set.");
 		lblCmdDesc.setForeground(Color.GRAY);
 		lblCmdDesc.setVerticalAlignment(SwingConstants.TOP);
-		lblCmdDesc.setBounds(12, 172, 221, 59);
+		lblCmdDesc.setBounds(12, 126, 221, 103);
 		cmdTab.add(lblCmdDesc);
 		
 		btnNewButton = new JButton("Send Command");
@@ -501,20 +492,35 @@ public class Window extends JFrame {
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				InterfaceEvents.sendCommand(commandIndex, Application.commands[commandIndex].template(txtCommandVariables.getText()));
+				InterfaceEvents.sendCommand(commandIndex, 
+						Application.commands[commandIndex].
+						template(txtCommandVariables.getText()));
 			}
 		});
 		
-		btnNewButton.setBounds(12, 138, 221, 25);
+		lstCommands = new JComboBox();
+		lstCommands.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int cmdIndex = lstCommands.getSelectedIndex();
+				String template = txtCommandVariables.getText();
+				InterfaceEvents.getCommandPreview(cmdIndex, template);
+			}
+		});
+		
+		cmdTab.add(lstCommands);
+		lstCommands.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		lstCommands.setBounds(14, 12, 219, 28);
+		
+		btnNewButton.setBounds(12, 92, 221, 25);
 		cmdTab.add(btnNewButton);
 		
 		txtCommandVariables = new JTextField();
-		txtCommandVariables.setBounds(12, 110, 221, 27);
+		txtCommandVariables.setBounds(12, 64, 221, 27);
 		cmdTab.add(txtCommandVariables);
 		txtCommandVariables.setColumns(10);
 		
 		lblCommandPreview = new JLabel("Command preview...");
-		lblCommandPreview.setBounds(12, 92, 214, 15);
+		lblCommandPreview.setBounds(12, 46, 214, 15);
 		cmdTab.add(lblCommandPreview);
 		
 		pnlControls = new JPanel();
@@ -647,10 +653,8 @@ public class Window extends JFrame {
     	            java.net.URI uri = new java.net.URI("http://simple-solutions.github.com/SimpleHuawei");
 					desktop.browse( uri );
 				} catch (URISyntaxException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} catch (IOException ex) {
-					// TODO Auto-generated catch block
 					ex.printStackTrace();
 				}
 			}
@@ -740,7 +744,7 @@ public class Window extends JFrame {
 	}
 	
 	public static void listCommand(String command) {
-		cmdList.addElement(command);
+		lstCommands.addItem(command);
 	}
 	
 	public static void listDevice(String device) {

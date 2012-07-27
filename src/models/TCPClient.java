@@ -42,9 +42,9 @@ public class TCPClient extends InternetService {
 		
 		Application.write("AT^SICS="+ this.serviceNumber +",CONTYPE,GPRS0;^SICS="+ 
 				this.serviceNumber +
-				",apn,\"stream.co.uk\";"+
-				"^sics="+ serviceNumber +",user,\"streamip\";"+
-				"^sics="+ serviceNumber +",passwd,\"streamip\";"+
+				",apn,\"o2.wyless.net\";"+
+				"^sics="+ serviceNumber +",user,\"SSolutions\";"+
+				"^sics="+ serviceNumber +",passwd,\"S1SL2\";"+
 				"^siss="+ serviceNumber +",srvtype,socket;");
 		
 		Application.write("AT^SISS="+ this.serviceNumber +",SRVTYPE,SOCKET;^SISS="+ 

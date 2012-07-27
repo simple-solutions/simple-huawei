@@ -1,14 +1,3 @@
-/**
- ******************************************************************************
- *                           CommandProcessor.java                            *
- ******************************************************************************
- * (Overview)
- * 
- *  @author simple-developer
- *  @since 6 Jul 2012
- * 
- * (Description)
- */
 package operations;
 
 import java.util.regex.Matcher;
@@ -20,13 +9,41 @@ import models.TCPHandler;
 import views.CallDialog;
 import views.Window;
 
+/**
+ ******************************************************************************
+ *                           CommandProcessor.java                            *
+ ******************************************************************************
+ * (Overview)
+ * 
+ *  @author simple-developer
+ *  @since 6 Jul 2012
+ * 
+ * (Description)
+ */
+
 
 public class CommandProcessor {
+	
+	private static boolean deviceConnected = false;
 	
 	/**
 	 * Accept an incoming message and perform actions depending on it's 
 	 */
 	public static void process(String response) {
+		
+		if(deviceConnected == true) {
+			//Extract the service profile.
+			Pattern p = Pattern.compile("\\d, \\d, (\\d)");
+			Matcher m = p.matcher(response);
+			boolean matchFound = m.find();
+			
+			if (matchFound) {
+				String serviceNoStr = m.group(1).trim();
+				int serviceNo = Integer.parseInt(serviceNoStr);
+				TCPHandler.setCurrentSocket(serviceNo);
+			}
+			deviceConnected = false;
+		}
 		
 		//If we are dealing with a COPS response
 		if(response.indexOf("+COPS") != -1) {
@@ -85,8 +102,8 @@ public class CommandProcessor {
 		//If the device requests a TCP write, get the available data from
 		//the TCP client and write it to the device, it should be expecting
 		//data of the length we are about to provide.
-		if(response.indexOf("^SISW:") != -1) {
-			//
+		if((response.indexOf("^SISW:") != -1 && TCPHandler.writing)) {
+			System.out.println("Confirm write");
 			TCPHandler.confirmClientWrite();
 		}
 
@@ -102,6 +119,32 @@ public class CommandProcessor {
 				Application.write("AT^SISR="+ serviceNumber +",1024");
 			}
 	
+		}
+		
+		if(response.indexOf("^SIS:") != -1){
+			deviceConnected = true;
+			//Extract the service profile.
+			Pattern p = Pattern.compile(".*^SIS: \\d, \\d, (\\d).*");
+			Matcher m = p.matcher(response);
+			boolean matchFound = m.find();
+			
+			if (matchFound) {
+				String serviceNoStr = m.group(1).trim();
+				int serviceNo = Integer.parseInt(serviceNoStr);
+				TCPHandler.setCurrentSocket(serviceNo);
+				deviceConnected = false;
+			}
+			
+		}
+		
+		if(response.indexOf("^SISR:") != -1){
+			if(TCPHandler.reading) {
+				TCPHandler.reading = false;
+			} else {
+				TCPHandler.reading = true;
+				TCPHandler.read();			
+			}
+			//Extract the service profile.
 		}
 		
 	}

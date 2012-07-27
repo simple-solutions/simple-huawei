@@ -160,7 +160,7 @@ public class SerialInterface {
 			int len = -1;					//Number of bytes read
 			String responseStr = "";		//String to hold response
 			
-			System.out.println("Serial Event!");
+			System.out.println("[SE]");
 			
 			try {
 				//While there are bytes available in the buffer.

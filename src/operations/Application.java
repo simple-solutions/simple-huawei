@@ -46,6 +46,17 @@ public class Application {
 	}
 	
 	/******************************
+	 *   S L E E P    A L I A S   *
+	 ******************************/
+	public static void sleep (int ms) {
+		try {
+			Thread.sleep(ms);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	/******************************
 	 *         W R I T E          *
 	 ******************************/
 	public static void write (String message) {
@@ -73,7 +84,7 @@ public class Application {
 		
 		commands = ConfigReader.read();
 		for(int i = 0; i < commands.length; i++) {
-			Window.listCommand(commands[i].getName());
+			Window.listCommand(commands[i].getMessage());
 		}
 		
 	}

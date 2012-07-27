@@ -26,19 +26,19 @@ public abstract class InternetService {
 		//Starts the service.
 		Application.write("at^siso=" + this.serviceNumber);
 		System.out.println("Service " + this.serviceNumber + " is started.");
-		started = true;
+		this.started = true;
 	}
 	
 	public void stop () {
 		Application.write("AT^SISC=" + this.serviceNumber);
 		System.out.println("Service " + this.serviceNumber + " is stopped.");
-		started = false;
+		this.started = false;
 	}
 	
 	public boolean isStarted () {
-		System.out.println("Service " + this.serviceNumber + " is started: " + started);
-		return false;
-		//return started;
+		System.out.println("Service " + this.serviceNumber + " is started: " +
+				started);
+		return this.started;
 	}
 	
 }

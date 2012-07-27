@@ -14,9 +14,9 @@ public class Command {
 	
 	public String template (String valuesStr) {
 		String[] values = valuesStr.split(",");
-		String command;
+		String command = this.message;
 		int c = 0;
-		command = this.message;
+
 		while(this.message.indexOf("@") != -1 && c < values.length) {
 			//Replace the index character
 			command = command.replaceFirst("@", values[c].trim());
