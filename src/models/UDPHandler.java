@@ -34,7 +34,7 @@ import operations.Application;
  ******************************************************************************
  */
 
-public class TCPHandler {
+public class UDPHandler {
 	
 	private static TCPClient client;
 	private static TCPServer server;
@@ -119,7 +119,7 @@ public class TCPHandler {
 	 */
 	public static void setCurrentSocket(int recentSocket) {
 		System.out.println("NEW SOCKET: " + recentSocket);
-		TCPHandler.currentSocket = recentSocket;
+		UDPHandler.currentSocket = recentSocket;
 		
 		Application.sleep(500);
 		

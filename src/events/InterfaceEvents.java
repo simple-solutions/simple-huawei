@@ -51,13 +51,13 @@ public class InterfaceEvents {
 	}
 	
 	public static void toggleTCPHandler (String address, 
-			int port) {
+			int port, String apn, String user, String pass) {
 		
 		if(TCPHandler.isStarted()) {
 			TCPHandler.stop();
 		} else {
 			if(!TCPHandler.isConfigured()) {
-				TCPHandler.configure(address, port);
+				TCPHandler.configure(address, port, apn, user, pass);
 			}
 			TCPHandler.start();
 		}

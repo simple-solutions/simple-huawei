@@ -82,6 +82,9 @@ public class Window extends JFrame {
 	private JTextField txtTcpPort;
 	private JTextArea txtTcpMessage;
 	private JLabel lblInstructionsQuick;
+	private JTextField txtAPN;
+	private JTextField txtTCPUser;
+	private JPasswordField passTCPPass;
 	
 	
 	public Window() {
@@ -108,7 +111,7 @@ public class Window extends JFrame {
 		setResizable(false);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 510, 650);
+		setBounds(100, 100, 510, 690);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -395,7 +398,7 @@ public class Window extends JFrame {
 				VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPane_3.setHorizontalScrollBarPolicy(ScrollPaneConstants.
 				HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane_3.setBounds(12, 134, 220, 70);
+		scrollPane_3.setBounds(14, 233, 134, 28);
 		tcpTab.add(scrollPane_3);
 		
 		txtTcpMessage = new JTextArea();
@@ -434,10 +437,10 @@ public class Window extends JFrame {
 		});
 		btnTcpSend.setIcon(new ImageIcon(Window.class.getResource("/javax/" +
 				"swing/plaf/metal/icons/ocean/upFolder.gif")));
-		btnTcpSend.setBounds(75, 212, 96, 30);
+		btnTcpSend.setBounds(150, 231, 82, 30);
 		tcpTab.add(btnTcpSend);
 		
-		JToggleButton tglClient = new JToggleButton("Start Server");
+		JToggleButton tglClient = new JToggleButton("Start Service");
 		tglClient.setIcon(new ImageIcon(Window.class.getResource("/com/sun/" +
 				"java/swing/plaf/windows/icons/Computer.gif")));
 		tglClient.addMouseListener(new MouseAdapter() {
@@ -457,8 +460,37 @@ public class Window extends JFrame {
 				btnTcpSend.setEnabled(true);
 			}
 		});
-		tglClient.setBounds(12, 102, 220, 30);
+		tglClient.setBounds(12, 200, 220, 30);
 		tcpTab.add(tglClient);
+		
+		txtAPN = new JTextField();
+		txtAPN.setColumns(10);
+		txtAPN.setBounds(87, 97, 145, 28);
+		tcpTab.add(txtAPN);
+		
+		JLabel lblApn = new JLabel("APN:");
+		lblApn.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblApn.setBounds(12, 104, 70, 18);
+		tcpTab.add(lblApn);
+		
+		txtTCPUser = new JTextField();
+		txtTCPUser.setColumns(10);
+		txtTCPUser.setBounds(87, 130, 145, 28);
+		tcpTab.add(txtTCPUser);
+		
+		JLabel lblUser = new JLabel("User:");
+		lblUser.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblUser.setBounds(12, 135, 70, 18);
+		tcpTab.add(lblUser);
+		
+		JLabel lblPassword = new JLabel("Pass:");
+		lblPassword.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblPassword.setBounds(12, 167, 70, 18);
+		tcpTab.add(lblPassword);
+		
+		passTCPPass = new JPasswordField();
+		passTCPPass.setBounds(87, 160, 145, 28);
+		tcpTab.add(passTCPPass);
 		tglClient.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
